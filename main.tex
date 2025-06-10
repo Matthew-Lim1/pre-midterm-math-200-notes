@@ -1,0 +1,1502 @@
+\documentclass[addpoints]{exam} 
+\usepackage{amsmath,amssymb,enumitem,fdsymbol,float,tikz,pgfplots,etoolbox,ifthen,xcolor,fullpage,ulem,graphicx,comment,environ,array,multicol} 
+\usepackage[hyperfootnotes=false,hidelinks]{hyperref}
+
+\usepackage{tikz}
+\usepackage{amsmath} 
+\usepackage{comment} 
+\begin{comment} 
+three needed for vector, comment for commenting on code
+\end{comment}
+
+\usepackage{mathtools}
+
+\begin{comment}
+mathtool is needed for square bracket vector notation. here is an example: 
+\[
+\begin{bmatrix} A & B & C & D \end{bmatrix} <- columns
+\begin{bmatrix} u \\ v \\ w \\ y \end{bmatrix} <- rows
+= 0.
+\]
+\end{comment}
+
+\usepackage{pst-node}
+\usepackage{auto-pst-pdf}
+\begin{comment}
+using to striking through matrix
+\end{comment}
+\addpoints
+\marksnotpoints
+\newcommand{\dee}{\text{d}}
+
+\definecolor{MyGreen}{rgb}{0.1, 0.4, 0.1}
+\definecolor{MyBlue}{rgb}{0.1, 0.1, 0.9}
+
+\AtBeginEnvironment{solution}{\color{MyGreen}}
+
+\newboolean{NoSolutions} \setboolean{NoSolutions}{true}
+\printanswers  \setboolean{NoSolutions}{false}
+
+
+\newcommand\pts[1][2]{\textcolor{MyBlue}{\text{\bf [#1 pts]}}}
+\newcommand\pt{\textcolor{MyBlue}{\text{\bf [1 pt]}}}
+
+\newcommand\rubric[1]{\tagged{rubric}{\textcolor{MyBlue}{#1}}}
+
+\newenvironment{rubricEnv}{\taggedblock{rubric} \color{MyBlue}}{\endtaggedblock}
+
+\newcommand{\onestar}{\raisebox{0.05cm}{\resizebox{1.6cm}{!}{$\bigstar\largewhitestar\largewhitestar\largewhitestar$ \ }}}
+\newcommand{\twostar}{\raisebox{0.05cm}{\resizebox{1.6cm}{!}{$\bigstar\bigstar\largewhitestar\largewhitestar$ \ }}}
+\newcommand{\threestar}{\raisebox{0.05cm}{\resizebox{1.6cm}{!}{$\bigstar\bigstar\bigstar\largewhitestar$ \ }}}
+\newcommand{\fourstar}{\raisebox{0.05cm}{\resizebox{1.6cm}{!}{$\bigstar\bigstar\bigstar\bigstar$ \ }}}
+
+\everymath{\displaystyle}
+\newcommand{\diff}[2]{\frac{\text{d}#1}{\text{d}#2}}
+\newcommand{\ds}{\displaystyle}
+
+
+\title{Math200 notes}
+\author{Matthew Lim}
+\date{May 2025}
+
+\begin{document}
+
+\maketitle
+\section*{General guideline}
+    \begin{itemize}
+    \setlength\itemsep{0.1em}
+    \item Professor's website:\\ \href{https://personal.math.ubc.ca/~cautis/math200/}{\textcolor{blue}{\underline{https://www.math.ubc.ca/~cautis/math200/}}}
+    \item Textbook is online, weekly WeBWork, two midterms (May 28th \& June 11th)
+    \item Calc 3 is multivariable analog of derivative and integrals in such a way to make a function into a solvable linear algebra problem.
+\end{itemize}
+\section{Vectors and Geometry in Two and Three Dimensions}
+\subsection*{First two or three classes will be a quick course on linear algebra.}
+\subsection{Vectors}
+\textit{
+This will cover 1.1-1.2 in the CLP textbook. Calculus 3 will be dealing will vector spaces. Vectors are \textbf{objects that describes distance and direction.}
+}
+
+\begin{figure}[!h]
+    \centering
+    \begin{tikzpicture}
+    \draw[thin,gray!40] (-3,-3) grid (3,3);
+    \draw[<->] (-3,0)--(3,0) node[right]{$x$};
+    \draw[<->] (0,-3)--(0,3) node[above]{$y$};
+    \draw[line width=2pt,blue,-stealth](0,0)--(3,1) node[anchor=south west]{$\boldsymbol{\vec{a}}$};
+    \draw[line width=2pt,red,-stealth](0,0)--(2,-2) node[anchor=north east]{$\boldsymbol{\vec{b}}$};
+\end{tikzpicture}
+    \caption{Vector space}
+    \label{fig:vector space}
+\end{figure}
+
+\pagebreak\textit{
+Vector addition graphically would have \textbf{starting point of $\vec{b}$} attached to the \textbf{end of $\vec{a}$}. The sum vector would start at the \textbf{start of $\vec{a}$} and end at \textbf{end of $\vec{b}$.}
+}
+\begin{figure}[!h]
+    \centering
+    \begin{tikzpicture}
+    \draw[thin,gray!40] (-3,-3) grid (5,3);
+    \draw[<->] (-3,0)--(5,0) node[right]{$x$};
+    \draw[<->] (0,-3)--(0,3) node[above]{$y$};
+    \draw[line width=2pt,blue,-stealth](0,0)--(3,1) node[anchor=south west]{$\boldsymbol{\vec{a}}$};
+    \draw[line width=2pt,gray!80,-stealth](0,0)--(2,-2) node[anchor=north east]{$\boldsymbol{\vec{b}}$};
+    \draw[line width=2pt,red,-stealth](3,1)--(5,-1) node[anchor=north east]{$\boldsymbol{\vec{b}}$};
+    \draw[line width=2pt,MyGreen,-stealth](0,0)--(5,-1) node[anchor=north] at (3,0.1){$\boldsymbol{\vec{a}+\vec{b}}$};
+\end{tikzpicture}
+    \caption{Vector addition}
+    \label{fig:vector addition}
+\end{figure}
+
+\textit{
+When you have a \textbf{real number multiplying a vector}, its called a \textbf{scalar multiplication}. Any real number is possible for scalar multiplication. When two vectors are on the same line, same direction, just different in scale, they are called to be \textbf{linearly dependent.} In this case, if $2\vec{a}=\vec{b}$, it can be said $\vec{b}$ is linearly dependent to $\vec{a}$, vise versa.
+}
+\begin{figure}[!h]
+    \centering
+    \begin{tikzpicture}
+    \draw[thin,gray!40] (-3,-1) grid (9,3);
+    \draw[<->] (-3,0)--(9,0) node[right]{$x$};
+    \draw[<->] (0,-1)--(0,3) node[above]{$y$};
+    \draw[line width=2pt,MyGreen,-stealth](0,0)--(9,3) node[anchor=north east]{$\boldsymbol{3\vec{a}}$};
+    \draw[line width=2pt,red,-stealth](0,0)--(6,2) node[anchor=north west]{$\boldsymbol{2\vec{a}}$};
+    \draw[line width=2pt,blue,-stealth](0,0)--(3,1) node[anchor=north west]{$\boldsymbol{\vec{a}}$};
+    \draw[line width=2pt,brown,-stealth](0,0)--(-3,-1) node[anchor= north west]{$\boldsymbol{-\vec{a}}$};
+\end{tikzpicture}
+    \caption{Scalar multiplication}
+    \label{fig:Scalar multiplication}
+\end{figure}
+
+\pagebreak\textit{
+Similar to addition, \textbf{subtraction} can be thought of as \textbf{adding a negative vector}. Here is a visual way of understanding what that means:
+}
+\begin{figure}[!h]
+    \centering
+    \begin{tikzpicture}
+    \draw[thin,gray!40] (-3,-3) grid (4,2);
+    \draw[<->] (-3,0)--(4,0) node[right]{$x$};
+    \draw[<->] (0,-3)--(0,2) node[above]{$y$};
+    \draw[line width=2pt,brown,-stealth](3,1)--(4,-1) node[anchor=north east]{$\boldsymbol{-\vec{b}}$};
+    \draw[line width=2pt,brown!40,-stealth](0,0)--(1,-2) node[anchor=north west]{$\boldsymbol{-\vec{b}}$};
+    \draw[line width=2pt,blue,-stealth](0,0)--(3,1) node[anchor=south west]{$\boldsymbol{\vec{a}}$};
+    \draw[line width=2pt,red,-stealth](0,0)--(-1,2) node[anchor= south west]{$\boldsymbol{\vec{b}}$};
+    \draw[line width=2pt,MyGreen!40,-stealth](0,0)--(4,-1) node[anchor= north] at (2,-0.6) {$\boldsymbol{\vec{a}-\vec{b}}$};
+    \draw[line width=2pt,MyGreen,-stealth](-1,2)--(3,1) node[anchor= north] at (0.5,1.5) {$\boldsymbol{\vec{a}-\vec{b}}$};
+\end{tikzpicture}
+    \caption{Subtraction}
+    \label{fig:Subtraction}
+\end{figure}
+
+\textit{
+In Figure \ref{fig:Subtraction}, I took $\vec{b}$ and made it into $-\vec{b}$ to visualize how subtraction works. By attaching the \textbf{start of $-\vec{b}$} to the \textbf{end of $\vec{a}$} just like addition, I have made a total vector which equals to $\vec{a}-\vec{b}$. Algebraically, this makes sense, as $a-b$ is equal to $a+(-b)$. With this visualization, it is easy to see how $\vec{a}-\vec{b}$ is just the vector that goes from the \textbf{end of $\vec{b}$} to the \textbf{end of $\vec{a}$.}
+}
+\subsubsection{
+Vector notation
+}
+\textit{
+Let us picture a vector. We will call this $\vec{a}$. The end point of this vector lies at (5,4). The brackets note a point notation. For vectors, \(\begin{bmatrix} 5\\4\end{bmatrix}\) would define $\vec{a}$. Sometimes vectors are represented in texts as \(\langle 5 \hspace{5} 4 \rangle\), but I will use the former notation, as it is commonly used in mathematics in general. As we work in 2 dimensions, $\vec{a}$ would be called a ${\rm I\!R}^2$ vector.
+}
+\begin{figure}[!h]
+    \centering
+    \begin{tikzpicture}
+    \draw[thin,gray!40] (-2,-2) grid (6,5);
+    \draw[<->] (-2,0)--(6,0) node[right]{$x$};
+    \draw[<->] (0,-2)--(0,5) node[above]{$y$};
+    \draw[line width=2pt,red,-stealth](0,0)--(5,4) node[anchor=south east]{$\boldsymbol{\vec{a}}$};
+    \draw[-,thick,red,dashed] (0,4) -- (5,4) node[anchor=south] at (2.5,4) {5};
+    \draw[-,thick,red,dashed] (5,0) -- (5,4) node[anchor=west] at (5, 2) {4};
+\end{tikzpicture}
+    \caption{Vector $a$}
+    \label{fig:Vector a}
+\end{figure}
+
+\pagebreak\textit{
+Although it is impossible to imagine a higher-dimensional vector graphically than ${\rm I\!R}^3$ vector as humans, it is very simple mathematically to have up to ${\rm I\!R}^n$ vectors. Let $\vec{c}$ = \(\begin{bmatrix} 2\\5\\4\end{bmatrix}\) and $\vec{b}$ = \(\begin{bmatrix} -2\\1\end{bmatrix}\). \\Then, \begin{equation} \vec{a} +\vec{b} = \begin{bmatrix}5\\4\end{bmatrix} + \begin{bmatrix}-2\\1\end{bmatrix} = \begin{bmatrix} 3\\5\end{bmatrix}.\end{equation} Very simple. The addition with vectors is exactly how you expect it to be. Just straight horizontal addition.
+}\\
+
+\textit{
+Scalar multiplication is similar in its simplicity. 
+\begin{equation}
+    3\vec{a} = 3\begin{bmatrix}5\\4\end{bmatrix} = \begin{bmatrix}15\\12\end{bmatrix}.
+\end{equation}
+Straight horizontal multiplication.
+}\\
+
+Hence, following this logic, 
+\begin{equation}
+    2\vec{a} - 7\vec{b}= 2\begin{bmatrix}5\\4\end{bmatrix} - 7\begin{bmatrix} -2\\1\end{bmatrix}= \begin{bmatrix}10\\8\end{bmatrix}-\begin{bmatrix}-14\\7\end{bmatrix}=\begin{bmatrix}24\\1\end{bmatrix}
+\end{equation}
+makes sense.
+
+\textit{
+So, here is a question, what is the sum of $\vec{a}$ and $\vec{c}$? Well, one might guess that since $\vec{c}$ is a ${\rm I\!R}^3$ vector and $\vec{a}$ is a ${\rm I\!R}^2$ vector, to add them together, it would be safe to assume the \textbf{3rd dimension of $\vec{a}$ to be 0.} If you have guessed that to be the case, you were wrong. Here is the general rule. \textbf{If two vectors are not in the same dimension, they cannot be added.} That is, $\vec{a}=\begin{bmatrix}5\\4\end{bmatrix} \neq \begin{bmatrix} 5\\4\\0\end{bmatrix}.$ Hence, $\vec{a}+\vec{c}$ cannot happen.
+}
+
+\subsubsection{Vector length}
+\textit{$\|\vec{a}\|$ is the generally understood notation for magnitude/length of a vector. Let's take a look at Figure \ref{fig:Vector a} again. Here, if we form a triangle with length of $\vec{a}$ being the hypotenuses of the right triangle, it is easy to understand that $\|\vec{a}\|$ must be equal to $\sqrt{5^2+4^2} =\sqrt{41}.$ So simple, that one might think there might be more to it, however this interpretation is correct. \\Furthermore, it can be generalized that if $\vec{a} = \begin{bmatrix}a_1\\a_2\end{bmatrix}, \|\vec{a}\| = \sqrt{a_1^2+a_2^2}.$ If $\vec{a} = \begin{bmatrix}a_1\\a_2\\a_3\end{bmatrix}, \|\vec{a}\| = \sqrt{a_1^2+a_2^2+a_3^2}$ and so on.}
+
+\pagebreak\subsubsection{
+Vector multiplication
+}
+\textit{
+Otherwise called as "dot product", vector multiplication is a pivotal concept to understand to move forward in math. Let us look at two vectors again. 
+}
+\begin{figure}[!h]
+    \centering
+    \begin{tikzpicture}
+    \draw[thin,gray!40] (-3,-3) grid (3,3);
+    \draw[<->] (-3,0)--(3,0) node[right]{$x$};
+    \draw[<->] (0,-3)--(0,3) node[above]{$y$};
+    \draw[line width=2pt,blue,-stealth](0,0)--(3,1) node[anchor=south west]{$\boldsymbol{\vec{a}}$};
+    \draw[line width=2pt,red,-stealth](0,0)--(2,-2) node[anchor=north east]{$\boldsymbol{\vec{b}}$};
+\end{tikzpicture}
+    \caption{Vector multiplication idea}
+    \label{fig:vector multiplication idea}
+\end{figure}\\
+\textit{
+Given one was handed the task of imagining the dot product of $\vec{a}$ and $\vec{b}$, one could imagine it having to do something with the \textbf{lengths/magnitude of the given vectors.} Well, they would be \textbf{almost correct.} In fact, the rest of the solution would be unimaginable for someone with no prior knowledge of linear algebra.\\
+}
+\textit{
+Let $\vec{a}=\begin{bmatrix}a_1\\a_2\\a_3\end{bmatrix}$ and $\vec{b} = \begin{bmatrix}b_1\\b_2\\b_3\end{bmatrix}.$ Here is the general definition of a dot product: \[\vec{a}\cdot\vec{b}=a_1b_1+a_2b_2+a_3b_3.\] Pretty straight forward. Note how the dot product of two vectors makes a real number, not a vector. We will get back to that.
+\\
+I've noted previously how it is almost correct to imagine dot product having to do something with the lengths/magnitude of the given vectors. That's because as defined, $\vec{a}\cdot\vec{b}=\|\vec{a}\|\|\vec{b}\|cos\theta.$ Now, you might question where the $cos\theta$ came from. So, I will now prove to you that $\vec{a}\cdot\vec{b}$ does equal $\|\vec{a}\|\|\vec{b}\|cos\theta.$
+}
+\subsubsection{
+Proof of dot product definitions
+}
+\textit{
+Note how $\vec{a}\cdot\vec{a} = \|\vec{a}\|^2$ $\big($pf: let $\vec{a} = \begin{bmatrix} a_1\\a_2\end{bmatrix}$, $\vec{a}\cdot\vec{a} = \begin{bmatrix} a_1\\a_2\end{bmatrix}\cdot\begin{bmatrix} a_1\\a_2\end{bmatrix} = a_1^2+a_2^2=\sqrt{a_1^2+a^2_2}^2=\|\vec{a}\|^2.\big)$\\\\
+I will also note here that \textbf{dot products between vectors are commutative. } This notion I will get back to, but the general consensus is that $\vec{b}\cdot\vec{a}=\vec{a}\cdot\vec{b}.$
+Hence, \[\|\vec{a}-\vec{b}\|^2=(\vec{a}-\vec{b})\cdot(\vec{a}-\vec{b}),\]
+\[=\vec{a}\cdot\vec{a}-\vec{a}\cdot\vec{b}-\vec{b}\cdot\vec{a}-\vec{b}\cdot\vec{b},\]
+\[=\|\vec{a}\|^2+\|\vec{b}\|^2-2\vec{a}\cdot\vec{b}.\]
+}
+\pagebreak\textit{
+At this point, you should be questioning, "what are we trying to solve?". So, I provide you with a graph. 
+}
+\begin{figure}[!h]
+    \centering
+    \begin{tikzpicture}
+    \draw[thin,gray!40] (-3,-3) grid (3,3);
+    \draw[<->] (-3,0)--(3,0) node[right]{$x$};
+    \draw[<->] (0,-3)--(0,3) node[above]{$y$};
+    \draw[line width=2pt,black,-stealth](0,0)--(3,1) node[anchor=south west] at (0.2,0.15){$\boldsymbol{\theta}$};
+    \draw[line width=2pt,blue,-stealth](0,0)--(3,1) node[anchor=south west]{$\boldsymbol{\vec{a}}$};
+    \draw[line width=2pt,red,-stealth](0,0)--(1,2) node[anchor=south west]{$\boldsymbol{\vec{b}}$};
+    \draw[line width=2pt,MyGreen,-stealth](1,2)--(3,1) node[anchor=south west] at (1.7, 1.6) 
+    {$\boldsymbol{\vec{a}-\vec{b}}$};
+\end{tikzpicture}
+    \caption{Example Vectors with $\theta$}
+    \label{fig:Example Vectors}
+\end{figure}\\
+\textit{
+It should be obvious that since the start of $\vec{a}-\vec{b}$ is attached to the end of $\vec{b}$, that this could be written as $\vec{b}+(\vec{a}-\vec{b})=\vec{a}.$ This makes algebraic sense as well. From this graph, the aforementioned $\|\vec{a}-\vec{b}\|^2$ could be seen as one of the lengths of the triangle, squared. \\\\Since we know lengths/magnitudes of $\vec{a}$ and $\vec{b}$ and $\theta$, length of $\vec{a}-\vec{b}$ could be solved using cosine rule we learned back in highschool. Recall that $C=\sqrt{a^2+b^2-2abcos\theta}$. Since we are solving for $\|\vec{a}-\vec{b}\|^2$ ($C^2$ in this case), we could state that $\|\vec{a}-\vec{b}\|^2=\|\vec{a}\|^2+\|\vec{b}\|^2-2\|\vec{a}\|\|\vec{b}\|cos\theta$.\\\\
+Therefore, as \[\|\vec{a}-\vec{b}\|^2=\|\vec{a}\|^2+\|\vec{b}\|^2-2\|\vec{a}\|\|\vec{b}\|cos\theta =\|\vec{a}\|^2+\|\vec{b}\|^2-2\vec{a}\cdot\vec{b},\]
+canceling out like-terms, it is proved that \[\|\vec{a}\|\|\vec{b}\|cos\theta = \vec{a}\cdot\vec{b}.\]
+$\blacksquare \hspace{5} QED$
+}\\\\
+Case in point, $\vec{a}\cdot\vec{b}=\|\vec{a}\|\|\vec{b}\|cos\theta = a_1b_1+a_2b_2+a_3b_3$ given that $\vec{a} = \begin{bmatrix} a_1\\a_2\\a_3\end{bmatrix}$ and $\vec{b}=\begin{bmatrix}b_1\\b_2\\b_3\end{bmatrix}.$
+
+\textit{
+It should also be noted here that since $\vec{a}\cdot\vec{b}$ has $\cos\theta$ in it, if they are linearly dependent, meaning $\theta = 0$, $\vec{a}\cdot\vec{b} = \|\vec{a}\|\|\vec{b}\|.$ If $\theta = 90\degree$, $\vec{a}\cdot\vec{b} = 0.$ If $\theta = 180\degree$, $\vec{a}\cdot\vec{b} = -\|\vec{a}\|\|\vec{b}\|.$ So, note how dot product behaves like a cosine curve, big to small than to big again as $\theta$ loops around. It is also here where we find a important property, that $\vec{a}\perp\vec{b}$ when $\vec{a}\cdot\vec{b}=0.$
+}
+
+\pagebreak\subsubsection{Determinant}
+Here is the gist of what determinant is:
+Determinant of a array is the area of P, given that P is a parallelogram of the column vectors. \\\\Woah, that's difficult to understand. Let's unpack what that means by visualizing.\\\\
+We are working with a 2x2 "array" such that $\vec{a}$ and $\vec{b}$ make up this "array".\\\\ This is what that looks like: $\vec{a} = \begin{bmatrix} a_1\\a_2\end{bmatrix}$, $\vec{b} = \begin{bmatrix}b_1\\b_2\end{bmatrix}$, $\begin{bmatrix}a_1&b_1\\a_2&b_2\end{bmatrix}$ is a 2x2 "array" we will be working with.\\\\ The "array" in question looks awfully like a matrix, but in this class, we are not going to be using the word matrix as there is a lot to unpack if we want to start using that word. 
+Parallelogram(P) we will be working with will look as such: 
+\begin{figure}[!h]
+    \centering
+    \begin{tikzpicture}
+    \draw[thin,gray!40] (0,0) grid (5,4);
+    \draw[<->] (0,0)--(5,0) node[right]{$x$};
+    \draw[<->] (0,0)--(0,4) node[above]{$y$};
+    \draw[line width=2pt,black,-stealth](0,0)--(3,1) node[anchor=south east] at (3,2){$\boldsymbol{P}$};
+    \draw[line width=2pt,blue,-stealth](0,0)--(3,1) node[anchor=north west]{$\boldsymbol{\vec{a}}$};
+    \draw[line width=2pt,red,-stealth](0,0)--(2,3) node[anchor=south east]{$\boldsymbol{\vec{b}}$};
+    \draw[line width=2pt,red!50,-stealth](3,1)--(5,4) node[anchor=north west]
+    {$\boldsymbol{\vec{b}}$};
+    \draw[line width=2pt,blue!50,-stealth](2,3)--(5,4) node[anchor=south east]{$\boldsymbol{\vec{a}}$};
+\end{tikzpicture}
+    \caption{Parallelogram(P)}
+    \label{fig:Parallelogram(P)}
+\end{figure}\\
+Note that we are in ${\rm I\!R}^2$ space.\\\\
+We define $\det\begin{bmatrix}a_1&b_1\\a_2&b_2\end{bmatrix}=\pm area(P) = a_1b_2-a_2b_1.$ The $\pm$ is for the case that $a_1b_2-a_2b_1$ is negative. It does not mean that the area is negative(as that is not possible), it just means that it is a positive area with a negative direction. \\\\Note here that if $\vec{a}$ and $\vec{b}$ are linearly dependent, determinant will be 0.
+\\\\
+Looks straight forward, so let's head to ${\rm I\!R}^3$.
+
+I will first show solution than explain what just happened:
+\[\det\begin{bmatrix}a_1&b_1&c_1\\a_2&b_2&c_2\\a_3&b_3&c_3\end{bmatrix}=a_1\det\begin{bmatrix}b_2&c_2\\b_3&c_3\end{bmatrix}-b_1\det\begin{bmatrix}a_2&c_2\\a_3&c_3\end{bmatrix}+c_1\det\begin{bmatrix}a_2&b_2\\a_3&b_3\end{bmatrix}.\]
+Looks confusing, so I'll explain. Let's look at $a_1\det\begin{bmatrix}b_2&c_2\\b_3&c_3\end{bmatrix}.$ To find what to multiply $a_1$, we cross out the row and column $a_1$ sits at, and multiply by the determinant of the leftovers. Could you see that?\\\\
+
+Then, you go next to $b_1$, where you do the same thing. Do the same for $c_1.$ Another thing to remember is that the signs alternate. From - to + to -, and so on. \\\\
+
+This is a bad explanation, but you can see that even for the 2x2 array, these same rules are applied, it is just that $\det b_2=b_2$, so there is no need for that extra step. Before, we stated that the area(P) is what determinants describe. In the case of ${\rm I\!R}^3$ determinant, you can think of a 3D parallelogram, a parallelepiped. Hence, the volume(P) is what we are depicting with the determinant.
+\\\\
+\textit{
+Here are some things that I said I would get back to, summarized as a note.
+Firstly, "dot product of two vectors make a real number, not a vector". So, then is dot product of three vectors possible? Simply, no. Since dot product of two vectors makes a real number, dot product of three vectors cannot happen, as the first two vectors multiplying would make a real number, and then it will just be a scalar multiplication. So, the notation $\vec{a}\cdot\vec{b}\cdot\vec{c}$ doesn't make sense. Maybe $(\vec{a}\cdot\vec{b})\vec{c}$ does. The important thing is that you understand why this is the case.\\
+Secondly, "dot product vectors are commutative". Yes, they are. This means $\vec{a}\cdot(c\vec{b}) = c(\vec{a}\cdot\vec{b})$. It doesn't matter if you switch their places up, the product will always be the same. Is this true for matrices? No, as for matrix a times matrix b does not equal to matrix b times matrix a. (We will not be going into that, as it is not required knowledge for MATH200).
+}
+
+\subsubsection{
+Cross Product
+}
+
+\textit{
+Let's do a little review. The $cos\theta$ in the dot product makes it so that, \textbf{if dot product is 0 between two vectors, they are perpendicular to each other}. Remember that.
+}\\\\
+\textit{
+Cross products are unique. Also are pretty useful in a way because we live in the 3rd dimension. They are tricky, as they only work for ${\rm I\!R}^3$ and above (mostly just for ${\rm I\!R}^3$, I presume). 
+}\\\\
+\textit{
+Here are some \textbf{standard basis vectors you need to remember:}
+\[
+\vec{i}=\begin{bmatrix}
+    1\\
+    0\\
+    0
+\end{bmatrix},
+\vec{j}=\begin{bmatrix}
+    0\\
+    1\\
+    0
+\end{bmatrix},
+\vec{k}=\begin{bmatrix}
+    0\\
+    0\\
+    1
+\end{bmatrix}.
+\]
+These are standard vectors for cross product, so the lettering will not change in most cases.
+}\\\\
+\textit{
+Here is a quick demonstration of how to use them:\\\\
+e.g.
+\[
+\begin{bmatrix}
+    3\\4\\-7
+\end{bmatrix}
+= 3\vec{i}+4\vec{j}-7\vec{k}.
+\]
+It is also through this that you may also learn $\vec{i}$ is a stand-in for the x-cord, $\vec{j}$ is a stand-in for the y-cord, and $\vec{k}$ is a stand-in for the z-cord.
+}\\\\
+
+\textit{
+Alright, let's jump right in. Cross product is defined in the following equation:\\\\ Given $\vec{a}=\begin{bmatrix}
+    a_1\\a_2\\a_3
+\end{bmatrix}$ and
+$\vec{b}=\begin{bmatrix}
+    b_1\\b_2\\b_3
+\end{bmatrix}$: 
+}
+\[
+\vec{a}\times\vec{b}=
+\det\begin{bmatrix}
+    \vec{i}&\vec{j}&\vec{k}\\
+    a_1&a_2&a_3\\
+    b_1&b_2&b_3
+\end{bmatrix}
+= \vec{i}\det\begin{bmatrix}
+    a_2&a_3\\
+    b_2&b_3
+\end{bmatrix}
+-\vec{j}\det\begin{bmatrix}
+    a_1&a_3\\
+    b_1&b_3
+\end{bmatrix}
++\vec{k}\det\begin{bmatrix}
+    a_1&a_2\\
+    b_1&b_2
+\end{bmatrix}.
+\]
+\textit{
+You can notice that, this time the a's and the b's are laid down horizontally, not vertically. Well, long stories short, it doesn't really matter if it is transposed or not. It just looks better this way because we are used to expanding out determinants by the top row.\\\\
+As stated before, $\vec{i},\vec{j},\vec{k}$ are stand-in for $x,y,z$ coordinates. So, it will look really messy, but all this is saying is that $\vec{a}$ and $\vec{b}$ has a cross product that gives the vector $\begin{bmatrix}
+    \det\begin{bmatrix}
+    a_2&a_3\\
+    b_2&b_3
+\end{bmatrix}\\
+    -\det\begin{bmatrix}
+    a_1&a_3\\
+    b_1&b_3
+\end{bmatrix}\\
+    \det\begin{bmatrix}
+    a_1&a_2\\
+    b_1&b_2
+\end{bmatrix}
+\end{bmatrix}.$
+}\\\\
+\textit{
+So, let's try an example:\\
+e.g.
+\[
+\vec{a}=
+\begin{bmatrix}
+    2\\4\\1
+\end{bmatrix},
+\vec{b}=
+\begin{bmatrix}
+    -1\\1\\3
+\end{bmatrix} \hookrightarrow
+\vec{a}\times\vec{b}=
+\det\begin{bmatrix}
+    \vec{i}&\vec{j}&\vec{k}\\
+    2&4&1\\
+    -1&1&3
+\end{bmatrix} = 
+\vec{i}\det\begin{bmatrix}
+    4&1\\1&3
+\end{bmatrix}-
+\vec{j}\det\begin{bmatrix}
+    2&1\\-1&3
+\end{bmatrix}
++\vec{k}\det\begin{bmatrix}
+    2&4\\-1&1
+\end{bmatrix} = 
+11\vec{i}-7\vec{j}+6\vec{k}=\begin{bmatrix}
+    11\\-7\\6
+\end{bmatrix}.
+\]
+Easy right?
+}
+
+\subsubsection{
+What are cross products?
+}
+\textit{
+Okay, so we figured out the answer to a cross product example question, but what does that vector even mean? I mean we have to find what it means to make it useful right? So, I am here to tell you that exact thing. \\\\ Cross products produce a vector that is \textbf{perpendicular} to the plane of the two original factor vectors.
+}
+\begin{figure}[!h]
+    \centering
+    \begin{tikzpicture}
+        \begin{axis}[domain=-1:1,y domain=-1:1, xlabel={$x$}, ylabel={$y$}, zlabel={$z$}]
+            \addplot3[->, thick, color=black] coordinates {(0,0,0) (1,-1,0)}
+            node[anchor=south west] at (axis cs:0.4,-.3,0) {$\boldsymbol{\theta}$};
+            \addplot3[->, thick, color=blue] coordinates {(0,0,0) (1,1,0)}
+            node[anchor=south east] at (axis cs:0.8,0.8,0) {$\boldsymbol{\vec{b}}$};
+            \addplot3[->, thick, color=red] coordinates {(0,0,0) (1,-1,0)}
+            node[anchor=south west] at (axis cs:0.8,-0.8,0) {$\boldsymbol{\vec{a}}$}; 
+
+            \addplot3[->, thick, color=MyGreen] coordinates {(0,0,0) (0,0,2)}
+            node at (axis cs:0,0,2.3) {$\boldsymbol{\vec{a} \times \vec{b}}$};
+            
+            \addplot3[surf,opacity=0.2,domain=-1:1, y domain=-1:1, samples=10, samples y=10] {0};
+
+        \end{axis}
+    \end{tikzpicture}
+    \caption{Vectors $\vec{a}$ and $\vec{b}$ lying on a plane, and their cross product $\vec{a} \times \vec{b}$ perpendicular to the plane.}
+    \label{fig:cross_product}
+\end{figure}\\\\
+\textit{Perpendicular, so 90 degrees to the plane. Just so we are clear what I mean. This doesn't mean it is always going to be in the $z$ direction, as the figure \ref{fig:cross_product} example just so conveniently had $\vec{a}$ and $\vec{b}$ sitting on the $xy$ plane, that the cross product went in the $z$ direction. So, in case your $\vec{a}$ and $\vec{b}$ doesn't sit on the $xy$ plane like mine, you just have to imagine a plane surface that sits them both nicely like mine, and a perpendicular cross product vector coming out of that plane as the Figure has depicted. Now, perpendicular means it could be going in the "up" direction like the figure above or "down" or "opposite" direction from the figure. As long as the cross product vector is perpendicular to the plane right? \\\\
+Wrong. Here, you incorporate the \textbf{"right-hand rule"}. You take your right hand, left side of your palm on the intersection of $\vec{a}$ and $\vec{b}$, then point your fingers towards the $\vec{a}$ direction, and then roll your fingers towards the $\vec{b}$. The end result would have your hand in a "thumbs-up!" position, to which, the thumb would be pointing towards the cross-product direction.
+}\\\\
+\textit{
+It should also be noted here the\textbf{ length of the cross product} is defined as such: \\\\
+df:
+\[
+\|\vec{a}\times\vec{b}\|=
+\|\vec{a}\|\|\vec{b}\|sin\theta.
+\]
+Just thought I would note that here.
+}
+\subsubsection{
+Perpendicular check
+}
+\textit{
+I said to remember that "if dot product of two vectors are 0, it means they are perpendicular to each other". Well, we are going to use that notion to prove that our cross products are indeed perpendicular to the plane. Here is how we are going to do it:\\\\
+We will take our cross-product vector, and then dot product with the original factor vectors individually. If both of them turn out to be 0, we are correct. Do you understand that?\\\\
+Okay, here we go. We will take our cross product from the previous example: $\begin{bmatrix}
+    11\\-7\\6
+\end{bmatrix}$. Our $\vec{a}=
+\begin{bmatrix}
+    2\\4\\1
+\end{bmatrix},
+\vec{b}=
+\begin{bmatrix}
+    -1\\1\\3
+\end{bmatrix}$ are here for the ride as well.\\\\
+pf:
+\[
+\begin{bmatrix}
+    2\\4\\1
+\end{bmatrix}\cdot
+\begin{bmatrix}
+    11\\-7\\6
+\end{bmatrix}=
+22-28+6 = 0\checkmark,
+\]
+\[
+\begin{bmatrix}
+    -1\\1\\3
+\end{bmatrix}\cdot
+\begin{bmatrix}
+    11\\-7\\6
+\end{bmatrix}=
+-11-7+18= 0\checkmark.
+\]
+So yeah, the cross product is perpendicular to the plane. \\\\
+$\blacksquare QED$
+}
+\subsubsection{
+Why do cross products give perpendicular vectors?
+} \label{sssec:1.6.3}
+\textit{
+Here is a little detour from the main course subject, to explain why cross products are perpendicular in the first place.\\\\
+We suggested when the dot product is 0, it signals that the two factor vectors are perpendicular. Let's dissect that notion.\\\\
+Here, we have two vectors which we want to find if they are perpendicular to each other: $(\vec{a}\times\vec{b})$ and $\vec{a}$. Of course just above, we have numerically proven they are. But why? So, bare with me of a moment. We have established that definition of dot products is as follows:\[\vec{a}\cdot\vec{b}=a_1b_1+a_2b_2+a_3b_3.\]As well as found that $\vec{a}\times\vec{b}=\begin{bmatrix}
+    \det\begin{bmatrix}
+    a_2&a_3\\
+    b_2&b_3
+\end{bmatrix}\\
+    -\det\begin{bmatrix}
+    a_1&a_3\\
+    b_1&b_3
+\end{bmatrix}\\
+    \det\begin{bmatrix}
+    a_1&a_2\\
+    b_1&b_2
+\end{bmatrix}
+\end{bmatrix}.$ Therefore, we can figure out that
+\[(\vec{a}\times\vec{b})\cdot\vec{a}=
+a_1\det\begin{bmatrix}
+    a_2&a_3\\
+    b_2&b_3
+\end{bmatrix} - 
+a_2\det\begin{bmatrix}
+    a_1&a_3\\
+    b_1&b_3
+\end{bmatrix}+
+a_3\det\begin{bmatrix}
+    a_1&a_2\\
+    b_1&b_2
+\end{bmatrix},
+\]
+which if you look at it, looks like another determinant. Particularly, 
+\[
+a_1\det\begin{bmatrix}
+    a_2&a_3\\
+    b_2&b_3
+\end{bmatrix} - 
+a_2\det\begin{bmatrix}
+    a_1&a_3\\
+    b_1&b_3
+\end{bmatrix}+
+a_3\det\begin{bmatrix}
+    a_1&a_2\\
+    b_1&b_2
+\end{bmatrix}=\det\begin{bmatrix}
+    a_1&a_2&a_3\\
+    a_1&a_2&a_3\\
+    b_1&b_2&b_3
+\end{bmatrix}
+\]
+And here is where we find that, because all three vectors exist in the same plane, the determinant of ${\rm I\!R}^3$ has no volume. Meaning 0. Hence, $(\vec{a}\times\vec{b})\cdot\vec{a}=0,$ meaning they are perpendicular.\\\\
+Similarly, you could do the same thing for $(\vec{a}\times\vec{b})\cdot\vec{b}$, which by no surprise, also equals to 0.
+}
+
+\subsubsection{
+Some properties
+}
+\textit{
+Although very useful, cross product is very limited as it satisfies very little mathematical properties. \\\\
+1. They are not commutative... but that doesn't imply they aren't commutative to a certain extent.\\
+They are almost commutative.\\\\
+Here is what that means: For cross products, $\vec{a}\times\vec{b} = -\vec{b}\times\vec{a}.$ Not as varsatile as dot products it seems.\\\\
+2. Idk what to even call this property, but \[
+(\vec{a}\times\vec{b})\cdot\vec{c} =
+\pm det\begin{bmatrix}
+    a_1&b_1&c_1\\a_2&b_2&c_2\\a_3&b_3&c_3
+\end{bmatrix}
+\]
+This is just the pf I did in \ref{sssec:1.6.3} section, just replacing the last dot product factor vector with $\vec{c}$ from $\vec{a}$. And also $\pm$ is there as volumes can't be negative either.
+}
+
+\subsubsection{
+Unit vector
+}
+\textit{
+This is just a rudimentary remark. Unit vector is a \textbf{vector with a length that is 1}. That's it.\\\\
+Here is a definition in math term:
+If $\|\vec{a}\|=1,$ then $\vec{a}$ is a unit vector. \\Here is an example of a question:\\\\
+e.g. \(
+\vec{a}=\begin{bmatrix}
+    2\\3\\1
+\end{bmatrix} 
+\), find a unit vector in direction of $\vec{a}$. $\rightarrow$ $\|\vec{a}\| = \sqrt{4+9+1} = \sqrt{14}$ \\\\we take $\frac{1}{\|\vec{a}\|}\vec{a}$ = $\frac{1}{\sqrt{14}}\begin{bmatrix}
+    2\\3\\1
+\end{bmatrix}$ or $\begin{bmatrix}
+    2/\sqrt{14}\\3/\sqrt{14}\\1/\sqrt{14}
+\end{bmatrix}.$ The former is better, as it is cleaner. Okay, to the next section! 
+}
+\pagebreak\subsubsection*{
+Cross and Dot product review
+}
+\textit{
+e.g.  Given $P=(1,-1,2), Q=(0,1,1), R=(3,4,0),$ what is the area of $\triangle PQR$?
+}
+\begin{figure}[!h]
+    \centering
+    \begin{tikzpicture}
+        \begin{axis}[view = {150}{30}, domain=1:3,y domain=-1:4, xlabel={$x$}, ylabel={$y$}, zlabel={$z$}, zmin=-0.5, zmax=2.5]
+            \addplot3[-, thick, color=black] coordinates {(1,-1,2) (0,1,1)}
+            node[anchor=west] at (axis cs:0,1,1){$\boldsymbol{Q}$};
+            \addplot3[-, thick, color=black] coordinates {(0,1,1) (3,4,0)}
+            node[anchor=north] at (axis cs:3,4,0) {$\boldsymbol{R}$}; 
+            \addplot3[-, thick, color=black] coordinates {(3,4,0) (1,-1,2)}
+            node[anchor=south] at (axis cs:1,-1,2) {$\boldsymbol{P}$};
+            
+            \addplot3[
+                patch,
+                patch type=triangle,
+                draw=none,
+                fill=blue,
+                opacity=0.3
+            ]
+            coordinates {
+                (1,-1,2)  % P
+                (0,1,1)   % Q
+                (3,4,0)   % R
+            };
+        \end{axis}
+    \end{tikzpicture}
+    \caption{$\triangle PQR$}
+    \label{fig:Triangle PQR}
+\end{figure}\\\\
+\textit{
+So, here is the plan. Since length of the cross product between two vectors gives the area of the parallelogram given by aforementioned factor vectors, we just have to divide that by 2. Understood? In case you didn't, I will put it into math terms:
+\[
+\|\vec{a}\times\vec{b}\|=2area(\triangle PQR)
+\] given that $\vec{a}=\vec{PQ}$ and $\vec{b}=\vec{PR}$.
+}\\\\
+\textit{
+How do we get $\vec{a}$ and $\vec{b}$ then? Well, I will visualize for you.
+}
+\begin{figure}[!h]
+    \centering
+    \begin{tikzpicture}
+        \begin{axis}[view = {310}{30}, domain=-0.5:1.5,y domain=-1.5:1.5, xlabel={$x$}, ylabel={$y$}, zlabel={$z$}, zmin=-1, zmax=2.5]
+            \addplot3[->, ultra thick, color=blue] coordinates {(1,-1,2) (0,1,1)}
+            node[anchor=west] at (axis cs:1,2,1.3){$\boldsymbol{\vec{a}=\vec{PQ}}$};
+            \addplot3[->, thick, color=black!80] coordinates {(0,0,0) (1,-1,2)}
+            node[anchor=west] at (axis cs:1,-1,2) {$\boldsymbol{P}$}; 
+            \node[anchor=west, opacity = 0.8] at (axis cs: 0,-1,1) {$\boldsymbol{\vec{p}=\begin{bmatrix}
+                1\\-1\\2
+            \end{bmatrix}}$}; 
+            \addplot3[->, thick, color=black!80] coordinates {(0,0,0) (0,1,1)}
+            node[anchor=east] at (axis cs:0,1,1) {$\boldsymbol{Q}$};
+            \node[anchor=east, opacity = 0.8] at (axis cs: 0,0.6,0.3) {$\boldsymbol{\begin{bmatrix}
+                0\\1\\1
+            \end{bmatrix}=\vec{q}}$}; 
+            \addplot3[->, thick, color=black!20] coordinates {(0,-1,0) (0,4,0)};
+            \addplot3[->, thick, color=black!20] coordinates {(0,0,0) (3,0,0)};
+            \addplot3[->, thick, color=black!20] coordinates {(0,0,-1) (0,0,2.5)};
+            \addplot3[
+                patch,
+                patch type=triangle,
+                draw=none,
+                fill=blue,
+                opacity=0
+            ]
+            coordinates {
+                (1,-1,2)  % P
+                (0,1,1)   % Q
+                (3,4,-1)   % R
+            };
+        \end{axis}
+    \end{tikzpicture}
+    \caption{$\vec{a}$ calculated}
+    \label{fig:vector a calculated}
+\end{figure}\\\\
+
+\pagebreak\textit{
+Is it clearer with this visual? Okay, so what happened is that we came to the other side of the previous figure. We are just looking at the segment $PQ$. Conveniently, we have our new vectors $\vec{p}$ and $\vec{q}$. They do not have to be named as such, it is just convenient, because they are vectors that starts from origin $(0,0,0)$ and ends at their respective points. And since they end at their points, their vector notation is also just the point notation turned into vector notation. Simple?\\\\
+}
+\textit{So, $\vec{a}$ goes from \textbf{end of $\vec{p}$} to the \textbf{end of $\vec{q}$}. Sounds similar? Yes, its because that's exactly what vector subtraction between $\vec{q}$ and $\vec{p}$ is. Hence, $\vec{q}-\vec{p}=\begin{bmatrix}
+    0\\1\\1
+\end{bmatrix}-\begin{bmatrix}
+    1\\-1\\2
+\end{bmatrix}=\begin{bmatrix}
+    -1\\2\\-1
+\end{bmatrix}=\vec{a}$.
+\\\\
+You can do the same for $\vec{b}$, now it will be $\vec{r}$- $\vec{p}$ and you will get $\vec{b}=\begin{bmatrix}
+    2\\5\\-2
+\end{bmatrix}.$
+\\\\}
+\textit{
+So, let's now take the cross product of $\vec{a}$ and $\vec{b}$.
+\[
+\vec{a}
+\times\vec{b} = 
+\det\begin{bmatrix}
+    \vec{i}&\vec{j}&\vec{k}\\
+    -1&2&-1\\
+    2&5&-2
+\end{bmatrix}=
+\vec{i}(1)-\vec{j}(4)+\vec{k}(-9)=\begin{bmatrix}
+    1\\-4\\-9
+\end{bmatrix}.
+\] Yay!! We have obtained the cross product vector of $\vec{a}$ and $\vec{b}$. Let's check for perpendicularity with dot product just to be sure.
+\[
+\begin{bmatrix}
+    1\\-4\\-9   
+\end{bmatrix}\cdot\begin{bmatrix}
+    -1\\2\\-1
+\end{bmatrix}=-1-8+9=0\checkmark,
+\]
+\[
+\begin{bmatrix}
+    1\\-4\\-9   
+\end{bmatrix}\cdot\begin{bmatrix}
+    2\\5\\-2
+\end{bmatrix}=2-20+18=0\checkmark.
+\]
+Okay, great. Let's now do the final step. Get the length of the cross product.
+\[
+\|\vec{a}\times\vec{b}\|=\sqrt{1+16+81}=\sqrt{98}
+\]
+which is the area of the parallelogram of $\vec{a}$ and $\vec{b}$, so we must now divide that by half since we want the triangle.\[
+\frac12\sqrt{98}=\frac{7}{2}\sqrt{2}=Area\triangle PQR.
+\] Solved! Yay!
+}
+\pagebreak\subsubsection{
+Projection 
+}
+\textit{
+Perpendicular/orthogonal projection to be exact. I will give a visualization so its easier to understand:
+}
+\begin{figure}[!h]
+    \centering
+    \begin{tikzpicture}
+        \begin{axis}[view = {40}{30}, domain=-0.5:1.5,y domain=-0.5:4.5, xlabel={$x$}, ylabel={$y$}, zlabel={$z$}, zmin=-0.5, zmax=4]
+            \addplot3[->, ultra thick, color=red] coordinates {(0,0,0) (0,28/13,42/13)}
+            node[anchor=south] at (axis cs:0,28/13,42/13) {$\boldsymbol{Proj_{\vec{b}}\vec{a}}$};
+            \addplot3[->, thick, color=MyGreen] coordinates {(0,28/13,42/13)(1,4,2)}
+            node[anchor=south west] at (axis cs:0.5, 3, 2.5) {$\boldsymbol{\vec{d}}$};
+            \addplot3[->, thick, color=black] coordinates {(0,0,0) (1,4,2)}
+            node[anchor=west] at (axis cs:1,4,2) {$\boldsymbol{\vec{a}}$}; 
+            \addplot3[->, thick, color=black] coordinates {(0,0,0) (0,2,3)}
+            node[anchor=east] at (axis cs:0,2,3) {$\boldsymbol{\vec{b}}$};
+            \addplot3[->, thick, color=black!20] coordinates {(0,-1,0) (0,4,0)};
+            \addplot3[->, thick, color=black!20] coordinates {(0,0,0) (3,0,0)};
+            \addplot3[->, thick, color=black!20] coordinates {(0,0,-1) (0,0,2.5)};
+            \addplot3[
+                patch,
+                patch type=triangle,
+                draw=none,
+                fill=blue,
+                opacity=0
+            ]
+            coordinates {
+                (-0.5,-0.5,4)  % P
+                (0,1,1)   % Q
+                (1.5,4,-0.5)   % R
+            };
+        \end{axis}
+    \end{tikzpicture}
+    \caption{$Proj_{\vec{b}}\vec{a}$ visualized}
+    \label{fig:Projection of vector a onto vector b}
+\end{figure}\\\\
+
+\textit{Perpendicular projection is interesting. You take the vector $\vec{a}$ and project it's "shadow" onto vector $\vec{b}$. The notation is $Proj_{\vec{b}}\vec{a}$, and it means projection of vector $\vec{a}$ onto vector $\vec{b}.$ The projection must be linearly dependent with $\vec{b}$, and the projection vector, in this case $\vec{d}$ must be perpendicular to $\vec{b}$. \\\\
+The projection should be some scalar multiple of $\vec{b}.$ Mathematically, \[
+Proj_{\vec{b}}\vec{a}=c\vec{b}
+\] with $c\in{\rm I\!R}$.\\\\}
+\textit{We have established that $\vec{b}\perp\vec{d},$ which, $\vec{d}=\vec{a}-Proj_{\vec{b}}\vec{a},$ do you see that? Okay, so since they are perpendicular, it would mean $\vec{d}\cdot\vec{b}=0\Leftrightarrow(\vec{a}-c\vec{b})\cdot\vec{b}=0.$ Does that make sense? I just combined the previous two equations into one. Alright, so $(\vec{a}-c\vec{b})\cdot\vec{b}=0\Leftrightarrow(\vec{a}\cdot\vec{b})=c(\vec{b}\cdot\vec{b}).$ I just distributed, that's it. Finally, $\Leftrightarrow c=\frac{\vec{a}\cdot\vec{b}}{\vec{b}\cdot\vec{b}},$ which means} 
+\[Proj_{\vec{b}}\vec{a}=\Big(\frac{\vec{a}\cdot\vec{b}}{\vec{b}\cdot\vec{b}}\Big)\vec{b}.\]
+\pagebreak\textit{Yeah. That's the definition of projection.}\\\\
+\textit{
+Let's do an example:\\e.g.
+$\vec{a}=\begin{bmatrix}
+    1\\4\\2
+\end{bmatrix},\vec{b}=\begin{bmatrix}
+    0\\2\\3
+\end{bmatrix}$ find $Proj_{\vec{b}}\vec{a}.$
+}
+\[
+\hookrightarrow \vec{a}\cdot\vec{b} = 0+8+6 =14\]\[\hookrightarrow \vec{b}\cdot\vec{b}=0+4+9=13
+\]
+\[
+\hookrightarrow Proj_{\vec{b}}\vec{a}=\Big(\frac{14}{13}\Big)\begin{bmatrix}
+    0\\2\\3
+\end{bmatrix}.
+\]
+\textit{
+Simple. Let's move on.
+}
+\subsection{
+Lines
+}
+\textit{
+This will cover 1.5 section of the CLP textbook. We know what lines are. Here is a example of a line: $y=2x+1.$ Simple, right? Well, In ${\rm I\!R}^2$, this is the correct way to describe a line. However, in ${\rm I\!R}^3$, it is not as simple.
+}
+\begin{figure}[!h]
+    \centering
+    \begin{tikzpicture}
+        \begin{axis}[view = {140}{30}, domain=-3:3,y domain=-8:8, xlabel={$x$}, ylabel={$y$}, zlabel={$z$}, zmin=0, zmax=8]
+            \addplot3[<->, ultra thick, color=red] coordinates {(-3,7,1) (3,-5,7)}
+            node[anchor=south east] at (axis cs:3,-5,7) {$\boldsymbol{L}$};
+            \addplot3[->, thick, color=black] coordinates {(0,0,0)(0,1,4)}
+            node[anchor=east] at (axis cs:0, 0.5, 2) {$\boldsymbol{\vec{p}}$};
+            \addplot3[->, thick, color=black] coordinates {(0,1,4) (-1,3,3)}
+            node[anchor=south] at (axis cs:-1,1,3) 
+            {$\boldsymbol{\vec{d}}$};
+            \addplot3[->, thick, color=black!60] coordinates {(0,0,0) (-1,3,3)}
+            node[anchor=west] at (axis cs:-0.5,1.5,1.5) 
+            {$\boldsymbol{\vec{p}+\vec{d}}$}; 
+            \node[anchor=south] at (axis cs:0,1,4) {$\boldsymbol{P}$};
+            \node[anchor=south] at (axis cs:-1,3,3) {$\boldsymbol{Q}$};
+            \addplot3[->, thick, color=black!20] coordinates {(0,-8,0) (0,8,0)};
+            \addplot3[->, thick, color=black!20] coordinates {(-3,0,0) (3,0,0)};
+            \addplot3[->, thick, color=black!20] coordinates {(0,0,-1) (0,0,7)};
+            \addplot3[
+                patch,
+                patch type=triangle,
+                draw=none,
+                fill=blue,
+                opacity=0
+            ]
+            coordinates {
+                (-3,-8,8)  % P
+                (0,1,1)   % Q
+                (3,8,0)   % R
+            };
+        \end{axis}
+    \end{tikzpicture}
+    \caption{Line}
+    \label{fig:Line}
+\end{figure}\\\\
+\textit{
+Previously, I have stated line is depicted by an equation "$y=2x+1$", which is called an \textbf{equation form} of a line. Well, in ${\rm I\!R}^3$, one equation form would give a \textbf{plane} instead. So, we use what we call \textbf{paramatric/vector form}. The figure above, \ref{fig:Line} illustrates a line in ${\rm I\!R}^3$. The line we have depicted crosses two points $P$ and $Q$. We then have two vectors $\vec{p}$ and $\vec{d}$. The $\vec{p}$ is a vector that goes from the origin to point $P$, and $\vec{d}$ is a vector that starts at point $P$ and ends at point $Q$. From this illustration, it is easy to see how a vector starting at the origin and ending at point $Q$ would be equal to $\vec{p}+\vec{d}.$ Let's imagine then a scalar multiple of $\vec{d}$. Imagine $2\vec{d}$ and a vector going from origin to the end of $2\vec{d}$. Now that vector would be equal to $\vec{p}+2\vec{d}$ right? How about $-\vec{d}$? How about $3\vec{d}$? $\frac{1}{2}\vec{d}$? Do you see the pattern? \\\\
+Here we will name this scalar quantity $t$, and as you have realized $t$ is any real number $t\in{\rm I\!R}.$ From this thought experiment, we can see that with just parameterizing $t$ and testing out any real number, we can obtain the direction and magnitude of this line. Hence why this form of line is called a \textbf{parametric form or vector form.} Mathematically, lines in ${\rm I\!R}^3$ are formulated as \[
+\vec{p}+t\vec{d}.
+\]
+}
+\textit{
+Let's try an example. e.g. $P=(0,1,4)$ and $Q=(-1,3,3).$ Find parametric form of line $L$ through $P\&Q.$}
+\[
+\vec{p}=\begin{bmatrix}
+    0\\1\\4
+\end{bmatrix}, \vec{d}=\begin{bmatrix}
+    -1\\3\\3
+\end{bmatrix}-\begin{bmatrix}
+    0\\1\\4
+\end{bmatrix}=\begin{bmatrix}
+    -1\\2\\-1
+\end{bmatrix}.
+\] Therefore, \[
+\vec{p}+t\vec{d}=\begin{bmatrix}
+    0\\1\\4
+\end{bmatrix}+t\begin{bmatrix}
+    -1\\2\\-1
+\end{bmatrix} or \begin{bmatrix}
+    0-t\\1+2t\\4-t
+\end{bmatrix}.
+\]
+\textit{First one looks a bit cleaner, so let's try to just use the first one. You can see figure \ref{fig:Line} for what this solution look like. So, does it matter if $\vec{p}$ ends at point $P$ or could it have ended at point $Q$? Well, no, not at all. You could have started with $\vec{p}$ going to point Q, and with $\vec{d}$ going from point $Q$ to point $P$ or other way around, it doesn't matter. All that matters is, the line is depicted by a vector formula that with a change in its parameter, all the possible length and direction is obtained. Understood? Good. Let's try more examples.
+}\\\\
+\subsubsection{Example questions with lines}
+\textit{
+e.g. Find the intersection of $L$ (from last question) with ($xz$)-plane $\Rightarrow$ $(x,0,z).$\\
+$\hookrightarrow$ Given by $\vec{p}+t\vec{d}=\begin{bmatrix}
+    0\\1\\4
+\end{bmatrix}+t\begin{bmatrix}
+    -1\\2\\-1
+\end{bmatrix}$, we have to solve $1+2t=0$ $\Leftrightarrow$ $t=\frac{-1}{2}.$
+}
+\[\Rightarrow \begin{bmatrix}
+    0\\1\\4
+\end{bmatrix}-\frac{1}{2}\begin{bmatrix}
+    -1\\2\\-1
+\end{bmatrix}=\begin{bmatrix}
+    1/2\\0\\9/2
+\end{bmatrix}.\]
+\textit{
+e.g. Find intersection of $L$ with $x$-axis.
+$L$ is $\begin{bmatrix}
+    -t\\1+2t\\4-t
+\end{bmatrix}$. So, we need to solve $1+2t=0$ and $4-t=0$, simultaneously. Which means, $t=-\frac12$ and $t=4$. So there is no solution. $L$ does not intersect with $x$-axis.
+}
+\textit{
+e.g. $L$ as before. $K$ line $\begin{bmatrix}
+    1-t\\4+t\\-3+2t
+\end{bmatrix}$ do $L$ and $K$ intersect?\\\\
+Solve: So, $K$'s parameter doesn't have to be the same with $L$ line for them to intersect. You just need the $x,y,z$ coordinates to be the same, not the parameter. So, by naming $K$'s parameter as $t$ too, you are putting a extra step of complexity to it. So, let's redo $K$.\\
+$K$ line $\Rightarrow \begin{bmatrix}
+    1-s\\4+s\\-3+2s
+\end{bmatrix}$. So we need to solve $-t=1-s$, $1+2t=4+s$, and $4-t=-3+2s$. There are two unknowns and three conditions. It will be very unlikely that there will be a solution. Alright, let's solve it. Firstly, $t=s-1$ $\rightarrow 1+2(s-1)=4+s$ and $4-(s-1)=-3+2s$. Hence, $s=5$ and $3s=8$. There is no solution. $L$ does not intersect with $K.$
+}
+\textit{
+e.g. Are $L\&K\perp$ to each other?\\\\
+Alright, to solve this we need to get $\vec{d}$ back. Conveniently, they are just the coefficients of $t$. $\vec{d}=\begin{bmatrix}
+    -1\\2\\-1
+\end{bmatrix}.$ Same goes for $K.$ Let's call this vector on $K$ as $\vec{f}$. $\vec{f}=\begin{bmatrix}
+    -1\\1\\2
+\end{bmatrix}.$ Since $\begin{bmatrix}
+    -1\\2\\-1
+\end{bmatrix}\cdot\begin{bmatrix}
+    -1\\1\\2
+\end{bmatrix}=1+2-2=1\neq0$, $L\&K$ are not $\perp$ to each other.
+}\pagebreak\\
+\textit{
+e.g. Find line $\perp$ to $L$.\\\\
+This is quite simple. We just need to find a vector $\vec{d}$(d for direction) that $\vec{d}\cdot\begin{bmatrix}
+    -1\\2\\-1
+\end{bmatrix}=0.$ Hence, let's do $\vec{d}=\begin{bmatrix}
+    1\\0\\-1
+\end{bmatrix}$. Any $\vec{d}$ that would give a dot product of 0 would work (except $\begin{bmatrix}
+    0\\0\\0
+\end{bmatrix}$ as that doesn't even have a direction), but this will be the $\vec{d}$ I will be choosing. And we need a point to start the vector at. Let $\vec{p}$ denote a vector that starts at the origin and end at a random "point" on the line. We will just let $\vec{p}=\begin{bmatrix}
+    0\\0\\0
+\end{bmatrix}$ because why not. Hence, our line that is perpendicular to $L$ will be $\begin{bmatrix}
+    v\\0\\-v
+\end{bmatrix}$. We gave it parameter $v$, just because $L$ already took parameter $t.$ 
+}
+\subsection{
+Planes in ${\rm I\!R}^3$
+}
+\textit{
+This will cover section 1.4 of the CLP textbook. Planes usually have a form of $ax+by+cz=d.$ It is expressed as an equation, which gave a plane. An example plane would be $5x-2y+3z=4$. Let us imagine a plane that goes through the origin. That means $ax+by+cz=0.$ }\\
+\textit{This is interesting, because $ax+by+cz$ is the definition of a dot product between $\begin{bmatrix}
+    a\\b\\c
+\end{bmatrix}$ and $\begin{bmatrix}
+    x\\y\\z
+\end{bmatrix}$, and it happens to be equal to 0. So that would mean, the most general vector that exist in the plane $ax+by+cz=0$ being $\begin{bmatrix}
+    x\\y\\z
+\end{bmatrix}$ would have to be $\perp$ to the vector $\begin{bmatrix}
+    a\\b\\c
+\end{bmatrix}$. So, this is essentially saying "solve for all/infinite amount of vectors $\begin{bmatrix}
+    x\\y\\z
+\end{bmatrix}$ that are perpendicular to the vector $\begin{bmatrix}
+    a\\b\\c
+\end{bmatrix}$, or more simply put, a plane that is perpendicular to $\begin{bmatrix}
+    a\\b\\c
+\end{bmatrix}$.}\\\\
+\textit{Here is a visualization of what that means.}
+\begin{figure}[!h]
+    \centering
+    \begin{tikzpicture}
+        \begin{axis}[domain=-2:2,y domain=-2:2, xlabel={$x$}, ylabel={$y$}, zlabel={$z$}, zmax=3]
+            \addplot3[->, thick, color=red] coordinates {(0,0,0) (1,1,0)}
+            node[anchor=south] at (axis cs:1,1,0) {$\boldsymbol{\begin{bmatrix}
+                x\\y\\z
+            \end{bmatrix}}$}; 
+            \addplot3[->, thick, color=MyGreen] coordinates {(0,0,0) (0,0,2)}
+            node at (axis cs:0,0,2.8) {$\boldsymbol{\begin{bmatrix}
+                a\\b\\c
+            \end{bmatrix}}$};
+            \addplot3[-, thick, color=black] coordinates {(0.2,0.2,0) (0.2,0.2,0.2)};
+            \addplot3[-, thick, color=black] coordinates {(0,0,0.2) (0.2,0.2,0.2)};
+            
+            \addplot3[surf,color=blue, opacity=0.15,domain=-2:2, y domain=-2:2, samples=10, samples y=10] {0};
+
+        \end{axis}
+    \end{tikzpicture}
+    \caption{Planes}
+    \label{fig:Planes}
+\end{figure}\pagebreak\\\\
+\textit{
+It is also true in general without $d=0$, $ax+by+cz=d$ plane is $\perp$ to $\begin{bmatrix}
+    a\\b\\c
+\end{bmatrix}$. It is also worth mentioning $d$ by itself doesn't explain how far it is from origin. Just $d=0$ means it goes through origin. That's it.
+}
+\subsubsection{
+What is $d$ then?
+}
+\begin{figure}[!h]
+    \centering
+    \begin{tikzpicture}
+        \begin{axis}[view = {150}{30}, domain=-3:3,y domain=-8:8, xlabel={$x$}, ylabel={$y$}, zlabel={$z$}, zmin=0, zmax=8]
+            \addplot3[->, thick, color=black] coordinates {(0,0,0)(0,1,4)}
+            node[anchor=east] at (axis cs:0, 0.5, 2) {$\boldsymbol{\begin{bmatrix}
+                p_1\\p_2\\p_3
+            \end{bmatrix}=\vec{p}}$};
+            \addplot3[->, thick, color=black] coordinates {(0,0,0) (-1,3,3)}
+            node[anchor=west] at (axis cs:-0.5,2,0.5) 
+            {$\boldsymbol{\begin{bmatrix}
+                x\\y\\z
+            \end{bmatrix}}$};
+            \addplot3[->, thick, color=black!20] coordinates {(0,-8,0) (0,8,0)};
+            \addplot3[->, thick, color=black!20] coordinates {(-3,0,0) (3,0,0)};
+            \addplot3[->, thick, color=black!20] coordinates {(0,0,-1) (0,0,7)};
+            \addplot3[patch, patch type=rectangle, opacity=0.4, draw=none, fill=blue!60] coordinates {(-3, 7, 1)(3, 0, 0)(3, -5, 7)(-3, 2, 8)};
+            \addplot3[->, ultra thick, color=red] coordinates {(0,1,4) (2,5,9)}
+            node[anchor=south] at (axis cs:2.5,4,7) 
+            {$\boldsymbol{\begin{bmatrix}
+                a\\b\\c
+            \end{bmatrix}}$};
+            \addplot3[->, ultra thick, color=black] coordinates {(0,1,4) (-1,3,3)}
+            node[anchor=south] at (axis cs:-1,1,3.5) 
+            {$\boldsymbol{\begin{bmatrix}
+                x\\y\\z
+            \end{bmatrix}-\vec{p}}$};
+        \end{axis}
+    \end{tikzpicture}
+    \caption{What is b?}
+    \label{fig:What is b?}
+\end{figure}
+\textit{
+As you can see, we have our two vectors from origin, $\vec{p}$ and vector $\begin{bmatrix}
+    x\\y\\z
+\end{bmatrix}$. These two vectors start at origin and ends at some point on the plane. We then have our vector sitting on the plane, going from the \textbf{end point of $\vec{p}$} to the \textbf{end point of vector $\begin{bmatrix}
+    x\\y\\z
+\end{bmatrix}$.} It is clear to see that this vector will be equal to $\begin{bmatrix}
+    x\\y\\z
+\end{bmatrix}-\vec{p}.$ Since our plane is perpendicular to the vector $\begin{bmatrix}
+    a\\b\\c
+\end{bmatrix}$, we can say that}
+\[
+\Big(\begin{bmatrix}
+    x\\y\\z
+\end{bmatrix}-\vec{p}\Big)\cdot\begin{bmatrix}
+    a\\b\\c
+\end{bmatrix}=0.
+\] Hence, $ax+by+cz=\vec{p}\cdot\begin{bmatrix}
+    a\\b\\c
+\end{bmatrix},$ thereby $d$ is just some number that happens to equal to $\vec{p}\cdot\begin{bmatrix}
+    a\\b\\c
+\end{bmatrix}.$
+\subsection*{
+Review
+}
+\textit{
+We have established in ${\rm I\!R}^2$,  equations such as $Y=mx+b$ gives a line, specifically named as "equation forms" of lines. In high school, we have learned how to calculate such lines by getting a $(x,y)$ coordinate and slope $m$ of the line, plugging those values into the equation to get $y$ intercept $b$ value to complete the equation. In this class, we will explore another way to craft the same equation.\\\\
+A line in ${\rm I\!R}^2$ can be obtained through 1. A point (e.g. A= (3,4)) and 2. a normal/perpendicular vector.\\\\
+Let's establish another point $M=(x,y),$ a general point in ${\rm I\!R}^2$, and let's state that $\vec{AM}\perp\vec{n}$, the normal vector. \\\\
+Let's call this $\vec{AM}=\vec{u}$, = $\begin{bmatrix}
+    2\\-1
+\end{bmatrix},$ hence $\vec{n}$ should be $\begin{bmatrix}
+    1\\2
+\end{bmatrix}.$ \\\\
+These facts establish that the Line $M$ with starting point $A$ with directional vector $\vec{u}=\begin{bmatrix}
+    2\\-1
+    \end{bmatrix},$ has an equation $\begin{bmatrix}
+        x-3\\y-4
+    \end{bmatrix}$, which is $\perp \begin{bmatrix}
+        1\\2
+    \end{bmatrix} \Leftrightarrow \begin{bmatrix}
+        x-3\\y-4
+    \end{bmatrix}\cdot\begin{bmatrix}
+        1\\2
+    \end{bmatrix}=0,$ hence solving the equation gives us $x+2y=11,$ a cartesian equation. 
+}\\\\
+\textit{
+Let's try a plane in ${\rm I\!R}^3$. A plane is given once again by 1. A point 2. two vectors that are not collinear (i.e. not scalar multiples of each other). Here is an example.\\
+e.g. A = (1,2,3), $\vec{u}=\begin{bmatrix}
+    1\\1\\1
+\end{bmatrix}$, $\vec{v}=\begin{bmatrix}
+    1\\-2\\2
+\end{bmatrix}.$\\\\
+Let $M=(x,y)$ be on this plane if $\vec{AM}$ is a combination of $\vec{u}$ and $\vec{v}.$ $\vec{AM}= \begin{bmatrix}
+    x-1\\y-2\\z-3
+\end{bmatrix}=t\begin{bmatrix}
+    1\\1\\1
+\end{bmatrix}+s\begin{bmatrix}
+    1\\-2\\2
+\end{bmatrix}.$ Therefore, \[
+x(t,s)=1+t+s, y(t,s)=2+t-2s, z(t,s)=3+t+2s.
+\] This depicts a parametric form of a plane. \\\\
+}
+\textit{
+Here is another way to depict a plane in ${\rm I\!R}^3$. You will need 1. A point 2. a normal vector.\\
+e.g. A=(1,-1,0), $\vec{n}=\begin{bmatrix}
+    1\\2\\3
+\end{bmatrix},$ and point $M=(x,y,z).$ We will establish here that $\vec{AM}\perp\vec{n}.$ Meaning $\begin{bmatrix}
+    x-1\\y+1\\z-0
+\end{bmatrix}\cdot\begin{bmatrix}
+    1\\2\\3
+\end{bmatrix}=0,$ $x+2y+3z=1,$ a cartesian form of a plane in ${\rm I\!R}^3$. \\\\
+}
+\textit{
+Here is a problem for you. Equation of a plane through points $A=(0,0,1), B=(1,-1,0), C= (1,2,4).$\\\\
+Here is the solution. $\vec{n}=\vec{AB}\times\vec{AC}.$\\
+$\vec{AB}=\begin{bmatrix}
+    1\\-1\\-1
+\end{bmatrix}, \vec{AC}=\begin{bmatrix}
+    1\\2\\3
+\end{bmatrix}.$ $$\vec{n}=\det\begin{bmatrix}
+    \vec{i}&\vec{j}&\vec{k}\\1&-1&-1\\1&2&3
+\end{bmatrix}=\begin{bmatrix}
+    -1\\-4\\3
+\end{bmatrix}.$$ \\\\ $M=(x,y,z)$ is on this plane when $\vec{AM} \perp \vec{n}.$ $$\vec{AM}= \begin{bmatrix}
+    x\\y\\z-1
+\end{bmatrix}, \vec{n}=\begin{bmatrix}
+    -1\\4\\3
+\end{bmatrix},$$ which means $$-1(x)-4(y)+3(z-1)=0\Leftrightarrow -x-4y+3z=0.$$
+}
+
+\textit{
+e.g. Find the equation of the plane through $A=(1,1,-1)$ and parallel to plane $x+4y+5z=11.$ Just note $A$ is not on the plane $x+4y+5z=11,$ to find that out, just plug in $A$ into $(x,y,z)$ in the plane equation to see that it is not equal to 11. The plane $x+4y+5z=11$ has normal vector $\vec{n}=\begin{bmatrix}
+    1\\4\\5
+\end{bmatrix}.$ The plane we are looking for is made of all the points $M=(x,y,z)$ such that $\vec{AM}=\perp\vec{n},$ $\begin{bmatrix}
+    x-1\\y-1\\z-1
+\end{bmatrix}\cdot\begin{bmatrix}
+    1\\4\\5
+\end{bmatrix}=0.$ Therefore, $x-1+4y-4-5z-5=x+4y+5z=10.$ See that since parallel, $a,b,c$ is same. Just point 1,1,-1 changes $d.$
+}
+\textit{
+Lets look at lines in ${\rm I\!R}^3.$ Lines in 3D is given by 1. A point + a vector 2. intersection of two planes. Let's do an example. e.g. $y+z=0, 2x+y+3z=6.$ Note how they are not parallel, so they must intersect in a line. Find one point of this line on the $x$-axis. $\begin{bmatrix}
+    3\\0\\0
+\end{bmatrix}.$ I got that because to be on the $x$-axis, the $y$ and $z$ coordinate must be 0. Next, we should find a vector with positive first coordinate which is parallel to both planes. To do that, we should look for $\begin{bmatrix}
+    a\\b\\c
+\end{bmatrix}$ such that $\begin{bmatrix}
+    a\\b\\c
+\end{bmatrix}\cdot\begin{bmatrix}
+    0\\1\\1
+\end{bmatrix}=0$ and $\begin{bmatrix}
+    a\\b\\c
+\end{bmatrix}\cdot\begin{bmatrix}
+    2\\1\\3
+\end{bmatrix}.$ Hence, $b+c=0$ and $2a+b+3c=0.$ So $b=-c$ and $2a-c+3c=0$, $b=-c, a=-c$. Therefore $\begin{bmatrix}
+    a\\b\\c
+\end{bmatrix}=\begin{bmatrix}
+    -c\\-c\\c
+\end{bmatrix}=c\begin{bmatrix}
+    -1\\-1\\1
+\end{bmatrix}.$ We have to find a unit vector with positive first coordinate, so applying scalar multiple of $-1,$ direction should be $\begin{bmatrix}
+    1\\1\\-1
+\end{bmatrix}$ with $c=\frac{1}{\sqrt{3}}.$ To give a parametric equation of the line, $A=\begin{bmatrix}
+    3\\0\\0
+\end{bmatrix}, \vec{u}=\frac{\begin{bmatrix}
+    1\\1\\-1
+\end{bmatrix}}{\sqrt{3}}.$ $$x(t)=3+\frac{t}{\sqrt{3}}, y(t)=\frac{t}{\sqrt{3}}, z(t)=\frac{-t}{\sqrt{3}}.$$ Hence, $$r(t)= (3+\frac{t}{\sqrt{3}}, \frac{t}{\sqrt{3}}, \frac{-t}{\sqrt{3}}).$$
+}
+\textit{
+We will start from problem 22 on WeBWorK 1. You are given 2 planes, $x+2y+3z=3$, $y+z=1$. To figure out the line of intersection between the two planes with parameter $t$, we will take $z$ to be the parameter t. Hence, $z=t, y=1-t, x=3-2(1-t)-3t=1-t.$ Hence $r(t)= (1-t,1-t,t).$\\\\
+Curves and their tangent vectors. Line $r(t)=(1-t,1-t,t) = (1,1,0) +t(-1,-1,1)$. You can also double check this by putting point vector $(1,1,0)$ back into the two plane equations to check if the equation makes sense. You could also check for parallel direction $(-1,-1,1)$ by perp to normal. 
+}
+\textit{
+→ $A=(1,1,0)$, parallel to vector $u =(-1,-1,1)$
+	$r’(t) = (-1,-1,1)$ as a vector $<-1,-1,1>$ ⇒ vector $u$
+	→ $r’(t) is v’(t)$ is a velocity vector which is parallel or same as $u$.
+		→ so derivative of a line is a line. Duh
+	→ circles in 2D → center point $(1,3)$ with radius 4 → equation of the circle with center $(1,3)$ with radius 4. (fg2)
+	→ $M=(x,y)$ is on this circle when $AM = 4$, $AM^2 =16,$ $\vec{AM}$ $=<x-1,y-3>, (x-1)^2+(y-3)^2=16$ ← cartesian equation
+	→ fg 2.1 (paramatric equation of circle in 2d)
+	→ paramatric equation is a good way to obtain a tangent line to your curve.
+	→ cartisian equations → implict describtion of the curve (as its in x and y) → partial derivative to obtain tangent line.
+
+	→ curve in 3D.
+		→ A curve in 3D
+			→ Equation of the cylinder ($z$ can be anything, for fixed $z$, $x$ and $y$ on the circle. 
+		→ $x^2+y^2=16$. (radius was 4).<-- only condition. Thats it. This would be a circle in 2D, now its cylinder in 3D.
+→ Side note, messed up radius is 4 but it was calculated as 1.
+}
+\subsection{
+Sketching Surfaces in ${\rm I\!R}^3$
+}
+\textit{
+This will cover section 1.7-1.9 in the CLP textbook. → Surfaces in 3D
+	→$ x^2+y^2=16$ → no constraint on $z$, so slice it, by $xy$ plane, or $xz$ plane, or $yz$ plane. Think about it. → for this one, fix $z$, probably so $z$=17, equation is always the same, so yeah you know how it looks
+	→ $z=x^2+y^2+3$. → slice it, fix z to idk $z$=20. Equation of circle, $x^2+y^2=17$. 
+		→ Intersection with plane of equation $z=a$, then $a=x^2+y^2+3$, $x^2+y^2=a-3$.
+		→ if $a<3$ then there is no solution to this equation. $x^2+y^2$ cannot equal negative number.
+		→ So everything happens above altitude 3. 
+			→ Everything is a circle. With radi=us sqrt$(a-3)$
+				→ with center $(0,0)$ fg(3)
+	→ $x^2+y^2+z^2 =25$ equation of sphere
+		→ $M=(x,y,z), O=(0,0,0)$, $\|\vec{OM}\|^2$=25, $\|\vec{OM}\|$=5, sphere with center (0,0,0) and radius 5.
+	→ Find the equation of the sphere with diameter [AB] where A=(1,2,3) B=(3,2,1)
+		→ center = $\omega$ = $((1+3)/2,(2+2)/2,(3+1)/2)$ → (2,2,2)
+		→$ r^2 $=$\omega A^2$ - s$qrt((1-2)^2+(2-2)^2+(3-2)^2)$ = 1+1=2
+		→ M is on this shpere when $\omega M^2$ = 2.
+		→ But $\vec{\omega M}$ =$<x-2,y-2,z-2>$
+		→ So the equaton is: $(x-2)^2+(y-2)^2 + (z-2)^2 = 2.$
+		→ slice it by $z= a$
+		→ $(x-2)^2+(y-2)^2=2 - (a-2)^2$ for solution where $2 -(a-2)^2 >=0, (a-2)^2 <=2$
+		→ $-sqrt(2)<=a-2<=sqrt(2), 2-sqrt(2)<=a<=2+sqrt(2)$
+			→ fg 4.
+}
+
+\subsection{
+Recap
+}
+\textit{
+Last time, we covered planes, parametrized curves, and tangent vectors.
+We will do a quick recap and to tie up some loose ends, we will briefly touch on sketching surfaces in ${\rm I\!R}^3$.
+}
+\subsubsection{Planes recap}
+\textit{
+Planes in ${\rm I\!R}^3$ can be summarized to simple equation$ ax + by +cz =d$. The coefficients associated with $x,y,z$ can be interpreted as the normal vector to the plane. 
+}
+
+(fg 1)
+
+\subsubsection{
+Parameterizing
+}
+\textit{
+We need to understand how to turn complicated surfaces and lines into flat planes and straight lines.
+To begin doing that we will begin by parameterizing lines. 
+To recap, we took at one point vector from the origin, call it $\vec{p}$, and direction vector, $\vec{d}$, scalar with $t$. 
+}
+(fg1.1)
+\textit{
+As $t$ varies, parameterized equation is tracing all the points on the line. We will use $r$ to denote a general point vector that varies with $t$, making a line equation, more generally, can consider any $r(t)$ (eq1)
+Let's push that idea to curves. Parameterizing circles is similar in nature to what we have been doing with lines, except the the angle is parameterized $t$.}
+(fg1.2)
+\textit{
+As $t$ spins around, $x$ coordinate is denoted by change in cosine over the angle t, with $y$ coordinate being denoted by sine. Of course, these coordinates are scaled properly by radius, $r.$
+}
+\textit{
+We will complicate it a bit by shifting the circle. 
+}
+(fg 1.3)
+\textit{
+We shifted the circle which had the center at the origin is now shifted 20 to the right and shifted 14 up. To calculate the new parameterized equation of the circle, we just need to add the shift vector. Since the original circle parameterized depicts the circle as $\begin{bmatrix}
+    5cos(t)\\5sin(t)\\0
+\end{bmatrix}$, we just need to add $\begin{bmatrix}
+    20\\14\\0
+\end{bmatrix}.$ Hence, resulting parameterized circle equation is $\begin{bmatrix}
+    20+5cos(t)\\
+    14+5sin(t)\\
+    0
+\end{bmatrix}.$ We can take it further and say if the equation was instead $\begin{bmatrix}
+    5cos(t)\\4sin(t)\\0
+\end{bmatrix}$, we could understand that it would be an elipse instead of a circle.
+}
+\textit{
+We can further generalize this. We can take the same principle and parameterize any curves. (eq 2)
+}
+\subsubsection{Tangent vectors}
+\textit{
+Let's take a look at tangent vectors.
+}
+fg(1.4) just derivative
+\textit{
+If you imagine you are on a rollercoaster, and the machine suddenly breaks. The direction, velocity you will be traveling in is what the tangent vector calculates. As we have established earlier in the notes, velocity vector is just depicted by the derivative of the original vector. To take the derivative of our $\vec{r}(t)=\begin{bmatrix}
+    x(t)\\y(t)\\z(t)
+\end{bmatrix},$ we just need to take the derivative the of the individual coordinates $x'(t), y'(t), z'(t)$, and just plug them back in. Hence $\vec{r}'(t)=\begin{bmatrix}
+    x'(t)\\y'(t)\\z'(t)
+\end{bmatrix}.$ To look at a specific tangent line on a curve, you just need to plug in the parameter $t$, to solve for that vector.
+}
+fg (1.5) example
+\textit{
+We take the previous example and look at the tangent line when parameter $t=0.$ Since $\vec{r}(t)=\begin{bmatrix}
+    20+5cos(t)\\14+5sin(t)\\0
+\end{bmatrix},$ $\vec{r}'(t)=\begin{bmatrix}
+    -5sin(t)\\5cos(t)\\0
+\end{bmatrix}.$ Plugging in $t=0,$$\vec{r}'(0)=\begin{bmatrix}
+    0\\5\\0
+\end{bmatrix},$ which if you look at the diagram, it makes sense, it does look like you would fly in that direction if the rollercoaster broke down.
+}
+\textit{
+Its good to note that tangent vectors are not unique, tangent vectors can be any vector in that tangent line, and its based on parameter. So it can go backwards, forwards, how ever long, just as long as its tangential to the curve, it can be any vector. So, a specific tangent lines are established by the parameter.
+}
+\subsubsection{
+Domains
+}
+\textit{
+Let's tie up some loose ends. When we look at functions with two variables, namely $f(x,y)$, we depict it as ${\rm I\!R}^2\rightarrow{\rm I\!R}^1$. This just simply states that we are plugging in two variables, two dimensions, to get back a single number, a single variable. We are going from two dimensions to one essentially.
+}
+\textit{
+We typically state "domain of $f(x,y)$= points $(x,y)$ where $f$ is well defined to state domains. What does this statement exactly mean though? We can look at a simpler example.
+e.g. $f(x)=\frac{1}{x}, f(x)={\rm I\!R}^1\rightarrow{\rm I\!R}^1$. Domain = $\{$all $x$ with $x\neq0$$\}$. This means that all $x$ that are not 0 is well defined. If it was $f(x)=\frac{1}{x(x-1)}$, domain = \{all $x$ except $x=0,1$\}.
+So, in ${\rm I\!R}^2,$ let's say $f(x,y)=\frac{sin(xy)}{x^2+y^2-7},$ we can say that domain of $f(x,y)=\{$ all $(x,y)$ except those with $x^2+y^2-7=0\}.$
+In this course, explaining with words will be sufficient, however in higher level math, it might be useful to know the previous example's domain notation can be shortened to domain = ${\rm I\!R}^2\textbackslash\{(x,y):x^2+y^2-7=0\}.$ The $\textbackslash$ just means minus or takeaway, and the $\{(x,y):x^2+y^2-7=0\}$ is called the locus, which just means set of points that satisfy a certain condition. So, the notation just means "all sets of points in ${\rm I\!R}^2$ minus the locus is equal to the domain for $f.$"
+}
+\subsubsection{
+Surfaces
+}
+\textit{
+Let's take a look at surfaces, specifically spheres.
+}
+spheres (fg2)
+\textit{
+Simple spheres are depicted by the equation $x^2+y^2+z^2=r^2.$ They are centered at the origin, (0,0,0) and have a radius $r.$ So what if they are not centered at the origin, what then? Well, let's say the sphere is now centered at point (a,b,c). Then, all this is saying is that we must make a equation, that if we were to shift it back by $\begin{bmatrix}
+    a\\b\\c
+\end{bmatrix}$, we must meet the condition $x^2+y^2+z^2=r^2.$ So, to make sure that happens, the equation is more generalized to $(x-a)^2+(y-b)^2+(z-c)^2=r^2.$ If we were to expand that out, it would become some variation of $x^2+y^2+z^2-2ax-2by-2cz+(a^2+b^2+c^2)=r^2$, which you would need to complete the square to get back the original form to describe (center, origin) of the sphere.
+}
+\textit{
+From here, it is also the next step to understand how ellipsoid look like, which is fairly easy to understand, as its just a scalar manipulation of the sphere equation, for example $x^2+2y^2+3z^2=14$ is an ellipsoid.
+}
+ellipsoids (fg 3)
+\textit{
+Let's call this ellipsoid $S.$ Without the visualization I had provided you, how can we visualize this model in our head? To do this, we will explore slicing. We will first try slicing this ellipsoid with the $xy$ plane using $z=a$. 
+}
+slice with planes (fg 4).
+\textit{
+When we try $a=0$, we get an ellipse formula $x^2+2y^2=14,$ which illustrates an ellipse with x-int=$\sqrt{14}$ and y-int $\sqrt{7}.$ When we try $a=-1,1$ we get $x^2+2y^2=11,$ which is just a smaller ellipse, so on $a=2:$ $x^2+2y^2=2,$ and $a=3:$$x^2+2y^2=-13,$ which doesn't make sense, so when $a=3$, its an empty set. so we can visualize what this ellipsoid would look like, but just to be kind, I'll visualize it for you.
+}
+\subsubsection{
+Slicing
+}
+\textit{
+Last time reviewed planes and tangent lines. We will start by sketching surfaces to visualize, and finally we will touch on limits and partial derivatives to finish things off.
+
+We will start by touching on some of slicing technique again. Do note in the text or in other disciplines or WeBWorK, it might note slicing as "tracing" or "level curves" or something else entirely. Just to keep in mind.
+
+Here is an example. e.g. $x^2+2y^2+3z^2=14.$ This is the example we covered last time. As we have covered, this is an ellipsoid. We dissected to guessed what it looks like through slicing with xy plane, utilizing z equaling some special values. We will look at 3 other examples to make certain of what we are doing.
+
+e.g. $x^2+y^2=9.$ Say you were walking down a street, and someone comes up, asks you to visualize this equation. Your first question should be, "well, is it in ${\rm I\!R}^2$ or ${\rm I\!R}^3$?" Because in ${\rm I\!R}^2$, this equation illustrates a circle, while in ${\rm I\!R}^3,$ it has a different interpretation. Precisely, this equation in ${\rm I\!R}^3$ illustrates a cylinder. I will show you how.
+
+Let's try slicing this shape with z=a. Notice how there is no z variable within this equation. That should hint to you that, no matter what "a" we set z to be, we will be left with a circle with radius of 3. Let's look at it from top down view. It looks like a same circle over and over again without being related to what z is. Hence, in ${\rm I\!R}^3$, this looks like a cylinder.
+
+We can look for another example. e.g. $x^2+y^2=z$. We will look at it from top down view, and slice it by z=a. Notice how z cannot equal to a negative number in this equation. Hence, it's good to note that if $a<0,$ the slice will come out empty. Okay, we will try slicing it by 0. $x^2+y^2=0,$ which is just a point at origin. How about $a=1?$ $x^2+y^2=1.$ It is a circle with a radius of 1. $a=2?$ It seems to be a circle with a radius slightly less than 2, more precisely, radius of $\sqrt{2}$. When we finally jump to $a=4,$ the radius of the circle will be equal to 2. 
+
+We can visualize that here: [top down view]
+
+So, what does this mean? How would it look like? Would it be like a cone? or a bowl? or anything else? Well, we can deduce it down, that it will definitely not look like a cone as when z=2, the radius is not 2, and it is slightly less the 2. So it doesn't expand linearly with growth of z. How about a bowl shape? Since the change in the grow of the radius as z changes seems to be slower, we can assume that it does indeed look like a bowl.
+
+Here is what it would look like. [Bowl shape view]
+
+We can even try slicing another way. Let's slice by the yz plane. When x=0, equation will be $z=y^2.$ So, it looks like a basic parabola. When x=4, equation will be $z=y^2+16.$ Now the parabola has moved up 16 in the z direction. So clearly, we can visualize what this equation would look like through slicing by any plane.
+
+So, if that equation looks like a bowl, what would a cone look like? Let's look at another example. e.g. $x^2+y^2=z^2.$ Since we know now that as z increases, the radius of the circle linearly expands with the change in z, this will indeed be in a shape of a cone. But is that all? How about when a equals to negative number? Since z is squared now, even if $a<0,$ this equation still makes sense. Hence, this equation gives us an hourglass shape instead of a cone. 
+
+Let's try slicing it by yz plane instead. When x=0, $y^2=z^2.$ This means that $y=z,-z.$ Which would look as such:
+
+[visualization of y=z,-z.]
+}
+\section{Derivatives and limits}
+\subsection{
+Limits
+}
+\textit{
+This will cover section 2.1-2.3 of the CLP textbook. We will jump straight into derivatives and limits. 
+}
+[figure 1]
+\textit{
+Recall how derivatives are defined. In MATH100, we depicted slope of tangent line when x=a to be the derivative of the f(x) at a. Let this tangent line be called $L.$ Then, slope of $L=f'(a)$. We defined $f'(a)= \lim_{h\to0}\frac{f(a+h)-f(a)}{h}.$ We looked at how we can make a secant line between x=a and x=a+h with h being a small adjustment away from a. We then looked at how that secant line turns into a tangent line as the distance h between the two points is taken to the limit of zero. 
+}
+[figure 1.1] recap of $R^2$
+\textit{
+In MATH200, we take the analog of ${\rm I\!R}^2$ example in ${\rm I\!R}^3.$ In this section, we will touch on limits, specifically how they are different between ${\rm I\!R}^2$ and ${\rm I\!R}^3.$
+}
+eq2.1
+\textit{
+Limits describe the value f(x) approaches as x gets closer to a. We define f to be continuous at x=a if lim x→ a, f(x)=f(a). Here is what that would look like:
+}
+Limit definition (eq 2.3)
+\textit{
+In ${\rm I\!R}^2$, we talk about the limit approaching a from left and right side. We have stated that if they agree, limit exist, if not, it doesn’t.
+
+In ${\rm I\!R}^3$, as (x,y) gets closer to (a,b), f(x,y) gets closer to L.
+}
+(eq 2.2)
+\textit{
+From this we can see how in ${\rm I\!R}^3$, limit from all directions must agree for the limit to exist. We can do some examples for limits with multiple variables.
+		→ Eq 3. (Limit in R^3)
+
+It is also fun to note that, in ${\rm I\!R}^3$, even if limit from all directions may agree, there might exist a random curve along the surface that when taken the limit of, does not agree. Hence, it's hard to state a limit exist, because there might exist a curve that may disagree. So we can only say a limit doesn’t exist in ${\rm I\!R}^3$. Although, it might be possible to just have a surface function so simple, that it is undeniable that limits exist, but otherwise, it is really hard to declare such notion.
+}
+\subsection{Partial Derivatives}
+\textit{
+Recall derivatives are defined as $f'(a)= \lim_{h\to0}\frac{f(a+h)-f(a)}{h}.$ In multi variable calculus, same principles apply. Instead of looking at $f'(a)$ however, we will look at $f(a,b)$ as we make similar secant planes to an small adjacent point on the surface. Let's take a look at $f(x,y)$. We can make a small step, h, in the x direction, and take a limit as h approaches zero. Here is how that looks:
+\[
+\lim_{h\to0}\frac{f(a+h,b)-f(a,b)}{h}.
+\]
+Pretty much the same as ${\rm I\!R}^2$, right?
+How about in the y direction? It is exactly the same, but now the small step, h, will be applied in the y direction.
+\[
+\lim_{h\to0}\frac{f(a,b+h)-f(a,b)}{h}.
+\]
+Amazing. We will be now depicting these as $\frac{\partial f}{\partial x}(a,b)$ and $\frac{\partial f}{\partial y}(a,b)$, respectively. 
+
+We can look at some examples.
+Partial derivatives examples (eq 5.)
+}
+\subsection{
+Derivatives
+}
+\textit{
+Okay, going back to the definition of derivatives. We define $f'(a)$ to be the rate of change of $f(x)$ at $x=a.$ Building up on that idea, we define $\frac{\partial f}{\partial x}=f_x(a,b)$ to be the rate of change of $f(x,y)$ at $(x,y) = (a,b)$ as you move in the $x$ direction. Similarly, we also state $\frac{\partial f}{\partial y}=f_y(a,b)$ to be the rate of change of $f(x,y)$ at $(x,y)=(a,b)$ as you move in the $y$ direction.
+}\\\\
+\textit{
+Let's try an example. e.g. $f(x,y) = x^2sin(xy).$ Then, $\frac{\partial f}{\partial x}=2xsin(xy)+x^2cos(xy)(y)$ and $\frac{\partial f}{\partial y} = x^2cos(xy)(x).$ Since $\frac{\partial f}{\partial x}$ is depicting the change in $f(x,y)$ at $(x,y)=(a,b)$ as we move in the $x$ direction, the $y$ variable is no longer a variable. It is constant. So, we treat it as a constant. When we took the partial derivative in respect to $x$, $y$ was treated as a constant. We can see this as well in the partial derivative of $f(x,y)$ in respect to $y.$\\\\
+You can skip this portion if you know product rule and chain rule, but in case you do not, I will review.\\\\
+Recall: the product rule $(f\cdot g)'=f'\cdot g+f\cdot g'.$ Since, $f(x,y) = x^2sin(xy),$ we will denote $x^2=f$ and $sin(xy)=g.$ Hence, $2x=f'$ and $cos(xy)(y)=g'.$ Therefore, $(f\cdot g)'=\frac{\partial f}{\partial x}=2xsin(xy)+x^2cos(xy)(y).$ I hope that make sense.
+}
+\textit{
+We will try another example. e.g. $f(x,y)=x^2y^3.$ $\frac{\partial f}{\partial x}=2xy^3, \frac{\partial f}{\partial y}=3x^2y^2.$ This one was pretty simple.
+}
+\textit{
+Continuing with notation, we can denote $\frac{\partial ^2f}{\partial x\partial y}=\frac{\partial}{\partial x}\Big(\frac{\partial f}{\partial y}\Big).$ Using the example just above, $\frac{\partial ^2f}{\partial x\partial y}=\frac{\partial}{\partial x}\Big(\frac{\partial f}{\partial y}\Big)=\frac{\partial}{\partial x}\Big(3x^2y^2\Big)=6xy^2.$ In parallel, $\frac{\partial^2f}{\partial y \partial x}=\frac{\partial}{\partial y}\Big(\frac{\partial f}{\partial x}\Big)=\frac{\partial}{\partial y}\Big(2xy^3\Big)=6xy^2.$ It is no coincidence that they equal the same. As long as the function they are both deriving is the same, and the number of times each variable it is been derived in respect to is the same, the result will always be the same. (e.g. $f_{xxxyyy}=f_{xyxyxy}.$)
+}
+\subsection{
+Composition
+}
+\textit{
+This subsection will be a little detour around derivatives, but it is a important topic to cover as these notation is used globally with scientific papers and will be very useful to know for solidifying the chain rule.\\\\
+Recall: $\frac{d}{dt}f(x(t))=\frac{df}{dx}(x(t))\cdot \frac{d}{dt}(x(t)).$ This is the normal definition for derivatives. When we take a derivative of a function, that in of itself has a nested function, (i.e. $sin(x^2)$, with $sin()$ being the outside function, with $x^2$ as the nested function.) we take the derivative of the outside function disregarding the inside function, then we multiply that with the derivative of the inside function (i.e. $2xcos(x^2).$) We state functions like this have a composition of ${\rm I\!R}^1\xrightarrow{x}{\rm I\!R}^1\xrightarrow{f}{\rm I\!R}^1.$ You can imagine this composition stating that "from ${\rm I\!R}^1$ variable $t$, creates a new ${\rm I\!R}^1$ object function $x(t)$, which then creates a new ${\rm I\!R}^1$ object function $f(x(t)).$" Another general example could be ${\rm I\!R}^1\xrightarrow{x,y}{\rm I\!R}^2\xrightarrow{f(x,y)}{\rm I\!R}^1,$ which states that ${\rm I\!R}^1$ variable $t$ is being mapped to ${\rm I\!R}^2$ variables $x(t)$ and $y(t)$, which is consolidated to a singular ${\rm I\!R}^1$ function $f(x(t),y(t))$, a function in $t.$
+}
+\textit{
+e.g. ${\rm I\!R}^1\rightarrow{\rm I\!R}^2\xrightarrow{f(x,y)=x^2-y^2}{\rm I\!R}^1.$ $x(t)=cos(t), y(t)=sin(t).$ $f(x(t),y(t))=cos^2(t)-sin^2(t).$ $\frac{d}{dt}f(x(t),y(t))=-2cos(t)sin(t)-2sin(t)cos(t)=-4sin(t)cos(t).$
+}
+\subsection{
+Chain Rule
+}
+\textit{
+$\frac{d}{dt}(f(x(t),y(t))=\frac{\partial f}{\partial x}(x(t), y(t))\cdot \frac{dx}{dt}+\frac{\partial f}{\partial y}(x(t),y(t))\cdot \frac{dy}{dt}.$
+}
+\textit{
+e.g. $\frac{\partial f}{\partial x}=2x$, $\frac{\partial f}{\partial y}=-2y$, $\frac{dx}{dt}=-sin(t)$, $\frac{dy}{dt}=cos(t).$ $\frac{d}{dt}(f(x(t),y(t))=2cos(t)(-sin(t))+(-2sin(t))(cos(t))=-4sin(t)cos(t).$ So, $\frac{d}{dt}(f(x(t),y(t))=\frac{\partial f}{\partial x}\frac{dx}{dt}+\frac{\partial f}{\partial y}\frac{dy}{dt}.$
+}
+\textit{
+More generally, if $f(x,y,z)$ exist, such that $x(t), y(t), z(t),$ the composition denotes this function to have a form ${\rm I\!R}^1\rightarrow{\rm I\!R}^3\xrightarrow{f}{\rm I\!R}^1$, that is $t\mapsto(x(t),y(t),z(t)).$\\\\
+Side note: When there is a $\rightarrow$, it defines a map. You can say "People in class $\xrightarrow{f}$ chairs". This states that there exists a  functions that maps people in class to chairs, uniquely assigning them to chairs. A well defined function would have each person assigned to a unique chair. Let's say the input is "student id number", then the function would output a unique chair number for that person to sit in. The function must not output two or more answers for each input, as that means the function is not well defined (i.e. the student is sitting/laying down on two chairs). The $\mapsto$ is what is happening to each person in the class. Since "people in class $\xrightarrow{f}$ chairs", we can equally state "person $\mapsto$ (maps to) chair they are sitting in".\\\\
+}
+\textit{
+Anyhow, back to the previous example. $\frac{d}{dt}(f(x,y,z))=\frac{\partial f}{\partial x}\frac{dx}{dt}+\frac{\partial f }{\partial y}\frac{df}{dt}+\frac{\partial f}{\partial z}\frac{dz}{dt}.$
+}
+\textit{
+e.g. $f(x(s,t),y(s,t))$, hence ${\rm I\!R}^2\rightarrow{\rm I\!R}^2\xrightarrow{f(x,y)}{\rm I\!R}^1$, $(s,t) \mapsto (x(s,t),y(s,t))$.
+}
+\textit{
+e.g. ${\rm I\!R}^2\rightarrow{\rm I\!R}^2\xrightarrow{f(x,y)=x^2-y^2}{\rm I\!R}^1$, $x(s,t)=cos(s+t), y(s,t)=e^{st}$, $f(x(s,t),y(s,t))=cos^2(s+t)-e^{2st}.$
+}
+\textit{
+$\frac{\partial f}{\partial s}=\frac{\partial f}{\partial x}\frac{\partial x}{\partial s}+\frac{\partial f}{\partial y}\frac{\partial y}{\partial s},$\\
+$\frac{\partial f}{\partial t}=\frac{\partial f}{\partial x}\frac{\partial x}{\partial t}+\frac{\partial f}{\partial y}\frac{\partial y}{\partial t}.$\\\\
+}
+\textit{
+Good way to remember how they chain rules are structured is to see that $\frac{\partial \color{red}{f}}{\partial \color{purple}{s}}=\frac{\partial \color{red}{f}}{\partial \color{blue}{x}}\frac{\partial \color{blue}{x}}{\partial \color{purple}{s}}+\frac{\partial \color{red}{f}}{\partial \color{green}{y}}\frac{\partial \color{green}{y}}{\partial \color{purple}{s}}.$ Note that the $\frac{\partial x}{\partial s}$ being multiplied is a partial because there are two variables $(s,t)$.
+}\\\\
+\textit{
+$\frac{\partial f}{\partial t} \Rightarrow \frac{\partial f}{\partial x}=2x, \frac{\partial y}{\partial y}=-2y, \frac{\partial x}{\partial t}= -sin(s+t), \frac{\partial y}{\partial t}=se^{st}.$ $\frac{\partial f}{\partial t}=2cos(s+t)(-sin(s+t))+(-2e^{st})(se^{st})=-2cos(s+t)sin(s+t)-2se^{2st}.$\\\\
+Note how $f(x(s,t),y(s,t))= cos^2(s+t) - e^{2st} \Rightarrow \frac{\partial}{\partial t}f(x(s,t),y(s,t))=-2cos(s+t)sin(s+t)-2e^{2st}.$ So, it works out.
+}
+
+\subsection{
+Tangent Planes
+}
+\textit{
+This will cover section 2.5 in the textbook. Imagine that you have a random surface, call it $f.$
+}
+\begin{figure}[!h]
+    \centering
+    \begin{tikzpicture}
+        \begin{axis}[view = {220}{30}, domain=-3:3,y domain=-8:8, xlabel={$x$}, ylabel={$y$}, zlabel={$z$}, zmin=0, zmax=8]
+            \addplot3[-, ultra thick, color=black] coordinates {(-1+pi/2,1,0) (-1+pi/2,1,3)}
+            node[anchor=west] at (axis cs:-1+pi/2,1,0) 
+            {$\boldsymbol{(a,b)}$};
+            \addplot3[domain=-3:3, domain y = -3:3, opacity=0.65, samples = 40, samples y = 40, surf, fill=pink,faceted color = teal] {sin(deg(sqrt((x+1)^2 + (y-1)^2)))+3};
+            \addplot3[domain=-1.5:2.5, domain y = -1:3, opacity=0.45, samples = 20, samples y = 20, surf, fill=blue!40, faceted color = red!50] 
+            {3};
+            \addplot3[->, thick, color=red] coordinates {(-1+pi/2,1,3) (-1,2,3)}
+            node[anchor=west] at (axis cs:-1,2,3) 
+            {$\boldsymbol{\vec{u}}$};
+            \addplot3[->, thick, color=blue] coordinates {(-1+pi/2,1,3) (-1,-0.5,3)}
+            node[anchor=west] at (axis cs:-1,-0.5,3) 
+            {$\boldsymbol{\vec{v}}$};
+            \addplot3[->, thick, color=MyGreen] coordinates {(-1+pi/2,1,3) (-1+pi/2,1,8)}
+            node[anchor=west] at (axis cs:-1+pi/2,1,8) 
+            {$\boldsymbol{\vec{n}}$};
+        \end{axis}
+    \end{tikzpicture}
+    \caption{Tangent plane}
+    \label{fig:tangent plane}
+\end{figure}
+\textit{
+Let point $(a,b)$ be a point on the $xy$ plane. We want to find a plane that meets the $f$ surface exact at point $(a,b,f(a,b)),$ and only at that point. This plane will be called a tangent plane. To find such plane, we must now find a point $(a,b)$ and a normal vector, since normal vector is shared between the surface $f$ and the tangent plane at point $(a,b,f(a,b))$.
+}
+\pagebreak\\\textit{
+To do this, our plan is to find vectors with their tails at point $(a,b,f(a,b))$ like $\vec{u}$ and $\vec{v}$, such that they lie on the tangent plane. To get the normal vector, we would then obtain the cross product of these two vectors.
+}
+\begin{figure}[!h]
+    \centering
+    \begin{tikzpicture}
+        \begin{axis}[axis lines = middle, xlabel = $x$, ylabel = $y$, samples = 100, domain = 0:3, domain y= 0:4, grid=both]
+            \addplot[blue, thick] {2*sqrt(x)} node at (axis cs:0.25,0.5) [anchor=west] {$f(x)$};
+            \addplot[red, thick, dashed, domain=0:3] {2 + (x-1)} node at (axis cs:2.5,3.7) [anchor=east] {$f'(a)$};
+            \addplot[mark=*, only marks] coordinates {(1,2)};
+            \addplot[black, thick, dashed] coordinates {(1,0) (1,2)} node at (axis cs:1,0) [anchor=south west] {$x=a$};
+            \addplot[black, thick] coordinates {(1,0) (1,2)} node at (axis cs:1,0) [anchor=south west] {$x=a$};
+            \addplot[black, thick, domain=1:2] {2} node at (axis cs:1.5,2) [anchor=north] {$1$};
+            \addplot[black, thick] coordinates {(2,2) (2,3)} node at (axis cs:2,2.5) [anchor=west] {$f'(a)$};
+            \addplot[->, MyGreen, very thick, domain=1:2] {2 + (x-1)} node at (axis cs:1.5,2.5) [anchor=south east] {$\vec{u}$};
+            
+        \end{axis}
+    \end{tikzpicture}
+    \caption{Tangent Line}
+    \label{fig:tangent line}
+\end{figure}\\
+\textit{
+Recall how tangent lines are depicted regularly. Let $\vec{u}$ to be a vector on the tangent line with a width of 1. Since the tangent line at $x=a$ gives a slope of $f(x)$ at $a$, the definition of slope states that vector $\vec{u}=\begin{bmatrix}
+    1\\f'(a)
+\end{bmatrix}$.
+}
+\textit{
+Now, think of this for ${\rm I\!R}^3$. Specifically, think about the vector $\vec{u}$ and $\vec{v}$ on the tangent plane. Let's fix x coordinate and y coordinate respectively for the vectors (meaning they are 0). Hence, it's easy to see how we can define \[\vec{u}=\begin{bmatrix}
+    1\\0\\\frac{\partial f}{\partial x}(a,b)
+\end{bmatrix} \text{ \textit{and} }\vec{v} =\begin{bmatrix}
+    0\\1\\\frac{\partial f}{\partial y}(a,b)
+\end{bmatrix}.\]
+As for $\vec{u}$ has the y coordinate fixed at 0, it means we must only move along the x-axis. So, we can think of figure \ref{fig:tangent line} to be the side view / slice of the plane and curve with the $xz$ plane. Alternatively, for $\vec{v}$, we can think of the same figure to be the slice by the $yz$ plane. Nevertheless, we are trying see the change in the function of the tangent plane in respect to x and y.
+}
+\textit{
+\[\vec{u}\times\vec{v}=\det\begin{bmatrix}
+    \vec{i}&\vec{j}&\vec{k}\\
+    1&0&f_x(a,b)\\
+    0&1&f_y(a,b)
+\end{bmatrix}=-f_x(a,b)\vec{i}-f_y(a,b)\vec{j}+\vec{k},\]
+which is the normal vector $\vec{n}.$
+}\\\\
+\textit{
+Let's try an example: $f(x,y)=2x^2+3y^2$. Find a tangent plane at (1,-1,5). $\frac{\partial f}{\partial x}=4x,$ $ \frac{\partial f}{\partial y}=6y.$ \\$f_x(1,-1)=4$ and $f_y(1,-1)=-6.$ Therefore, $\vec{n}=-4\vec{i}+6\vec{j}+\vec{k}$ (if you are confused as to why it is -4 now, I just took the equation $-f_x(a,b)\vec{i}-f_y(a,b)\vec{j}+\vec{k},$ and plugged in the values). Hence, the plane has an equation $-4x+6y+z=d,$ which plugging in (1,-1,5), we can figure out d=-5. In conclusion, The equation of the tangent plane at (1,-1,5) is $-4x+6y+z=-5.$
+}
+\textit{
+Before we move on to the next topic, I will make a quick note about implicit functions. If $x^2+y^2+z^2=1$, you can always write in the form of $z=f(x,y)$ or $x=(y,z)$ or $y=(x,z)$. These implicit functions make it useful to see the changes in one variable in respect to other variables, which you would not have seen otherwise.
+}
+\end{document}
